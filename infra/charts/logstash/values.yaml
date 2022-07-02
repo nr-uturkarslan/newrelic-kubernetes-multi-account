@@ -1,0 +1,9 @@
+name: logstash
+namespace: elk
+
+replicas: 1
+
+logstashJavaOpts: "-Xmx1g -Xms1g"
+
+httpPort: 9600
+beatsPort: 5044

@@ -1,0 +1,9 @@
+name: filebeat
+namespace: elk
+
+image: "docker.elastic.co/beats/filebeat"
+imageTag: "8.2.3"
+
+replicas: 1
+
+logstashName: logstash

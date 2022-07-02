@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-pipeline
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+data:
+  logstash.conf: |
+    input {
+      beats {
+        port => {{ .Values.beatsPort }}
+      }
+    }
+    output {
+      if [kubernetes][namespace] == "team1" {
+        newrelic {
+          license_key => "{{ .Values.newRelicLicenseKeyTeam1 }}"
+          base_uri => "{{ .Values.newRelicLogsApi }}"
+        }
+      }
+      else if [kubernetes][namespace] == "team2" {
+        newrelic {
+          license_key => "{{ .Values.newRelicLicenseKeyTeam2 }}"
+          base_uri => "{{ .Values.newRelicLogsApi }}"
+        }
+      }
+    }
