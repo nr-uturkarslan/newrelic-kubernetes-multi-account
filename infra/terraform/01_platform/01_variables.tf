@@ -5,7 +5,7 @@
 # project
 variable "project" {
   type    = string
-  default = "nr"
+  default = "nr1"
 }
 
 # location_long
@@ -38,24 +38,10 @@ variable "instance" {
   default = "001"
 }
 
-## Specific
-
-# shared
-variable "shared" {
-  type    = string
-  default = "shared"
-}
-
 # platform
 variable "platform" {
   type    = string
   default = "platform"
-}
-
-# stats
-variable "stats" {
-  type    = string
-  default = "stats"
 }
 
 ## Resource Names

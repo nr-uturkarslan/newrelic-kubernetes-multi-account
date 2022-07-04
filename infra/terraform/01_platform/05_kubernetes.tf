@@ -1,10 +1,10 @@
 ### Kubernetes Cluster ###
 
 # Kubernetes Cluster
-resource "azurerm_kubernetes_cluster" "nr" {
+resource "azurerm_kubernetes_cluster" "nr1" {
   name                = var.project_kubernetes_cluster_name
-  resource_group_name = azurerm_resource_group.nr.name
-  location            = azurerm_resource_group.nr.location
+  resource_group_name = azurerm_resource_group.nr1.name
+  location            = azurerm_resource_group.nr1.location
 
   dns_prefix         = var.platform
   kubernetes_version = "1.23.5"
@@ -30,10 +30,10 @@ resource "azurerm_kubernetes_cluster" "nr" {
   }
 }
 
-# Kubernetes Nodepool - General
+# Kubernetes Nodepool - General usage
 resource "azurerm_kubernetes_cluster_node_pool" "general" {
   name                  = "general"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.nr.id
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.nr1.id
   vm_size               = "Standard_DS2_v2"
 
   orchestrator_version = "1.23.5"
@@ -48,10 +48,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "general" {
   max_count           = 3
 }
 
-# Kubernetes Nodepool - Timeseries Processor
+# Kubernetes Nodepool - Storage optimized
 resource "azurerm_kubernetes_cluster_node_pool" "storage" {
   name                  = "storage"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.nr.id
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.nr1.id
   vm_size               = "Standard_DS2_v2"
 
   orchestrator_version = "1.23.5"
