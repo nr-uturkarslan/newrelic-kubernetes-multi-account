@@ -1,6 +1,0 @@
-apiVersion: v1
-name: filebeat
-version: 8.1.0
-appVersion: 8.1.0
-sources:
-  - https://github.com/elastic/beats
