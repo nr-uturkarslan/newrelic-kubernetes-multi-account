@@ -14,4 +14,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "newrelic.common.serviceAccount.name" . }}
     namespace: {{ .Release.Namespace }}
-{{- end -}}
+{{- end }}

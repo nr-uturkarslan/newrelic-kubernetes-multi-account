@@ -8,9 +8,6 @@ metadata:
     {{- include "newrelic.common.labels" . | nindent 4 }}
 rules:
   - apiGroups: [""]
-    resources:
-      - "pods"
-      - "services"
-      - "endpoints"
-  verbs: ["get", "list", "watch"]
-{{- end -}}
+    resources: ["pods", "services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+{{- end }}
