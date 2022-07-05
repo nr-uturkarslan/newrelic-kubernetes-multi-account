@@ -86,8 +86,24 @@ spec:
               {{- end }}
             - name: FB_DB
               value: {{ .Values.fluentBit.db | quote }}
-            - name: PATH
-              value: {{ .Values.fluentBit.path | quote }}
+            - name: LICENSE_KEY_ALPHA
+              value: {{ .Values.fluentBit.licenseKeyAlpha | quote }}
+            - name: NAMESPACE_ALPHA
+              value: {{ .Values.fluentBit.namespaceAlpha | quote }}
+            - name: PATH_ALPHA
+              value: {{ .Values.fluentBit.pathAlpha | quote }}
+            - name: LICENSE_KEY_BRAVO
+              value: {{ .Values.fluentBit.licenseKeyBravo | quote }}
+            - name: NAMESPACE_BRAVO
+              value: {{ .Values.fluentBit.namespaceBravo | quote }}
+            - name: PATH_BRAVO
+              value: {{ .Values.fluentBit.pathBravo | quote }}
+            - name: LICENSE_KEY_CHARLIE
+              value: {{ .Values.fluentBit.licenseKeyCharlie | quote }}
+            - name: NAMESPACE_CHARLIE
+              value: {{ .Values.fluentBit.namespaceCharlie | quote }}
+            - name: PATH_CHARLIE
+              value: {{ .Values.fluentBit.pathCharlie | quote }}
             - name: K8S_BUFFER_SIZE
               value: {{ .Values.fluentBit.k8sBufferSize | quote }}
             - name: K8S_LOGGING_EXCLUDE

@@ -26,8 +26,14 @@
 
 fluentBit:
   logLevel: "info"
+
   path: "/var/log/containers/*.log"
+  pathAlpha: "/var/log/containers/*alpha*.log"
+  pathBravo: "/var/log/containers/*bravo*.log"
+  pathCharlie: "/var/log/containers/*charlie*.log"
+
   windowsPath: "C:\\var\\log\\containers\\*.log"
+
   db: "/var/log/flb_kube.db"
   windowsDb: "C:\\var\\log\\flb_kube.db"
   criEnabled: false
@@ -55,8 +61,28 @@ fluentBit:
     inputs: |
       [INPUT]
           Name              tail
-          Tag               kube.*
-          Path              ${PATH}
+          Tag               kube.${NAMESPACE_ALPHA}*
+          Path              ${PATH_ALPHA}
+          Parser            ${LOG_PARSER}
+          DB                ${FB_DB}
+          Mem_Buf_Limit     7MB
+          Skip_Long_Lines   On
+          Refresh_Interval  10
+
+      [INPUT]
+          Name              tail
+          Tag               kube.${NAMESPACE_BRAVO}*
+          Path              ${PATH_BRAVO}
+          Parser            ${LOG_PARSER}
+          DB                ${FB_DB}
+          Mem_Buf_Limit     7MB
+          Skip_Long_Lines   On
+          Refresh_Interval  10
+
+      [INPUT]
+          Name              tail
+          Tag               kube.${NAMESPACE_CHARLIE}*
+          Path              ${PATH_CHARLIE}
           Parser            ${LOG_PARSER}
           DB                ${FB_DB}
           Mem_Buf_Limit     7MB
@@ -110,8 +136,22 @@ fluentBit:
     outputs: |
       [OUTPUT]
           Name           newrelic
-          Match          *
-          licenseKey     ${LICENSE_KEY}
+          Match          kube.${NAMESPACE_ALPHA}*
+          licenseKey     ${LICENSE_KEY_ALPHA}
+          endpoint       ${ENDPOINT}
+          lowDataMode    ${LOW_DATA_MODE}
+
+      [OUTPUT]
+          Name           newrelic
+          Match          kube.${NAMESPACE_BRAVO}*
+          licenseKey     ${LICENSE_KEY_BRAVO}
+          endpoint       ${ENDPOINT}
+          lowDataMode    ${LOW_DATA_MODE}
+
+      [OUTPUT]
+          Name           newrelic
+          Match          kube.${NAMESPACE_CHARLIE}*
+          licenseKey     ${LICENSE_KEY_CHARLIE}
           endpoint       ${ENDPOINT}
           lowDataMode    ${LOW_DATA_MODE}
 
