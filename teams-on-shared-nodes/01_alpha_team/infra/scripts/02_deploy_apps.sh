@@ -59,6 +59,17 @@ helm upgrade nri-kube-events \
   --set licenseKey=$NEWRELIC_LICENSE_KEY_ALPHA \
   "../charts/nri-kube-events"
 
+### New Relic Kube Events ###
+helm dependency update "../charts/nri-kube-events"
+helm upgrade nri-kube-events \
+  --install \
+  --wait \
+  --debug \
+  --namespace $namespaceAlpha \
+  --set global.cluster=$clusterName \
+  --set licenseKey=$NEWRELIC_LICENSE_KEY_ALPHA \
+  "../charts/nri-kube-events"
+
 ### New Relic Prometheus ###
 helm dependency update "../charts/nri-prometheus"
 helm upgrade nri-prometheus \
