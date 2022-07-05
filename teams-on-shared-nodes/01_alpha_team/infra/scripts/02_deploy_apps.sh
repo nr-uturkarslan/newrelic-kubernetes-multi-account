@@ -48,19 +48,30 @@ kubectl create namespace $namespaceAlpha
 kubectl create namespace $namespaceBravo
 kubectl create namespace $namespaceCharlie
 
+### New Relic Kube Events ###
+helm dependency update "../charts/nri-kube-events"
+helm upgrade nri-kube-events \
+  --install \
+  --wait \
+  --debug \
+  --namespace $namespaceAlpha \
+  --set global.cluster=$clusterName \
+  --set licenseKey=$NEWRELIC_LICENSE_KEY_ALPHA \
+  "../charts/nri-kube-events"
+
 ### New Relic Prometheus ###
-helm dependency build "../charts/nri-prometheus"
+helm dependency update "../charts/nri-prometheus"
 helm upgrade nri-prometheus \
   --install \
   --wait \
   --debug \
   --namespace $namespaceAlpha \
   --set global.cluster=$clusterName \
-  --set licenseKey=$NEWRELIC_LICENSE_KEY \
+  --set licenseKey=$NEWRELIC_LICENSE_KEY_ALPHA \
   "../charts/nri-prometheus"
 
 ### New Relic Logging ###
-helm dependency build "../charts/nri-logging"
+helm dependency update "../charts/nri-logging"
 helm upgrade nri-logging \
   --install \
   --wait \
