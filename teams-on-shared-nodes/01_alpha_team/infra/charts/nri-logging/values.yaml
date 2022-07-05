@@ -27,6 +27,10 @@
 fluentBit:
   logLevel: "info"
 
+  namespaceAlpha: alpha
+  namespaceBravo: bravo
+  namespaceCharlie: charlie
+
   path: "/var/log/containers/*.log"
   pathAlpha: "/var/log/containers/*alpha*.log"
   pathBravo: "/var/log/containers/*bravo*.log"
