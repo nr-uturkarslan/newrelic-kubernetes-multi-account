@@ -4,13 +4,28 @@
 ### App Setup ###
 #################
 
+### Set parameters
+project="nr1"
+locationLong="westeurope"
+locationShort="euw"
+stageLong="dev"
+stageShort="d"
+instance="001"
+
+platform="platform"
+
 ### Set variables
 
-bashLoggerName="bashlogger"
+# Cluster name - AKS
+clusterName="aks${project}${locationShort}${platform}${stageShort}${instance}"
 
-clusterName="kind-test-cluster-001"
-team1="team1"
-team2="team2"
+# Namespaces
+namespaceAlpha="alpha"
+namespaceBravo="bravo"
+namespaceCharlie="charlie"
+
+# Bash logger for testing
+bashLoggerName="bashlogger"
 
 ####################
 ### Build & Push ###
@@ -18,14 +33,20 @@ team2="team2"
 
 # Bash Logger
 docker build \
-  --tag $bashLoggerName \
-  ../apps/bashlogger
+  --platform linux/amd64 \
+  --tag "${DOCKERHUB_NAME}/${bashLoggerName}" \
+  "../../apps/bashlogger"
 docker push "${DOCKERHUB_NAME}/${bashLoggerName}"
 #########
 
-##############
-### TEAM 1 ###
-##############
+##################
+### Deploy K8s ###
+##################
+
+### Namespaces ###
+kubectl create namespace $namespaceAlpha
+kubectl create namespace $namespaceBravo
+kubectl create namespace $namespaceCharlie
 
 ### New Relic Prometheus ###
 helm dependency build "../charts/nri-prometheus"
@@ -33,8 +54,7 @@ helm upgrade nri-prometheus \
   --install \
   --wait \
   --debug \
-  --create-namespace \
-  --namespace $team1 \
+  --namespace $namespaceAlpha \
   --set global.cluster=$clusterName \
   --set licenseKey=$NEWRELIC_LICENSE_KEY \
   "../charts/nri-prometheus"
@@ -45,10 +65,15 @@ helm upgrade nri-logging \
   --install \
   --wait \
   --debug \
-  --create-namespace \
-  --namespace $team1 \
+  --namespace $namespaceAlpha \
   --set global.cluster=$clusterName \
-  --set licenseKey=$NEWRELIC_LICENSE_KEY \
+  --set namespaceAlpha=$namespaceAlpha \
+  --set namespaceBravo=$namespaceBravo \
+  --set namespaceCharlie=$namespaceCharlie \
+  --set licenseKeyAlpha=$NEWRELIC_LICENSE_KEY_ALPHA \
+  --set licenseKeyBravo=$NEWRELIC_LICENSE_KEY_BRAVO \
+  --set licenseKeyCharlie=$NEWRELIC_LICENSE_KEY_CHARLIE \
+  --set endpoint="https://log-api.eu.newrelic.com/log/v1" \
   "../charts/nri-logging"
 
 ### Bashlogger ###
@@ -56,8 +81,7 @@ helm upgrade $bashLoggerName \
   --install \
   --wait \
   --debug \
-  --create-namespace \
-  --namespace $team1 \
+  --namespace $namespaceBravo \
   --set dockerhubName=$DOCKERHUB_NAME \
   --set name=$bashLoggerName \
   "../charts/$bashLoggerName"
