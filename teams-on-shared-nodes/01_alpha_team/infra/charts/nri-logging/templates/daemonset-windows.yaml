@@ -1,4 +1,4 @@
-{{- if and (include "newrelic-logging.areValuesValid" $)  $.Values.enableWindows }}
+{{- if $.Values.enableWindows }}
 {{- range .Values.windowsOsList }}
 apiVersion: apps/v1
 kind: DaemonSet
