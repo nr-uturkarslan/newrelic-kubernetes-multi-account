@@ -1,4 +1,4 @@
-package dto
+package create
 
 type RequestDto struct {
 	Value string `json:"value"`

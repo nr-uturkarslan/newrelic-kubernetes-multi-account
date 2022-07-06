@@ -1,38 +1,20 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
+	"bravo-persistancy-service/commons"
+	"bravo-persistancy-service/controllers"
+	"bravo-persistancy-service/data"
 
-	"github.com/go-redis/redis"
+	"github.com/gin-gonic/gin"
 )
 
-type Author struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-}
+const PORT string = ":8080"
 
 func main() {
-	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
+	nrapp := commons.CreateNewRelicAgent()
+	dbClient := data.CreateDbClient()
 
-	json, err := json.Marshal(Author{Name: "Person", Age: 25})
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = client.Set("Person", json, 0).Err()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	val, err := client.Get("Person").Result()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(val)
+	router := gin.Default()
+	controllers.CreateHandlers(router, nrapp, dbClient)
+	router.Run(PORT)
 }

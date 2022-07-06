@@ -4,20 +4,21 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/newrelic/go-agent/v3/newrelic"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 
 	"bravo-persistancy-service/commons"
-	dto "bravo-persistancy-service/services/create/dtos"
+	"bravo-persistancy-service/data"
+	dto "bravo-persistancy-service/dtos"
 
 	"bravo-persistancy-service/entities"
 )
 
 type CreateHandler struct {
-	Nrapp *newrelic.Application
+	DbClient *data.DbClient
 }
 
-func (s CreateHandler) Create(
+func (handler CreateHandler) Create(
 	ginctx *gin.Context,
 ) {
 
@@ -25,14 +26,24 @@ func (s CreateHandler) Create(
 	commons.Log(zerolog.InfoLevel, "Create method is triggered...")
 
 	// Parse request body
-	requestBody, err := s.parseRequestBody(ginctx)
-
+	requestBody, err := handler.parseRequestBody(ginctx)
 	if err != nil {
 		return
 	}
 
+	// Create an entity
+	entity := handler.createEntity(requestBody)
+
+	// Save entity to DB
+	err = handler.DbClient.Insert(entity)
+	if err != nil {
+		commons.CreateFailedHttpResponse(ginctx, http.StatusInternalServerError,
+			"Entity could not be saved into the DB.")
+		return
+	}
+
 	commons.CreateSuccessfulHttpResponse(ginctx, http.StatusOK,
-		s.createResponseDto(responseDtoFromSecondService))
+		handler.createResponseDto(entity))
 
 	// Log end of method execution
 	commons.Log(zerolog.InfoLevel, "Create method is executed.")
@@ -41,12 +52,12 @@ func (s CreateHandler) Create(
 func (CreateHandler) parseRequestBody(
 	ginctx *gin.Context,
 ) (
-	*dto.RequestDto,
+	*RequestDto,
 	error,
 ) {
 
 	// Parse request body
-	var requestDto dto.RequestDto
+	var requestDto RequestDto
 	err := ginctx.BindJSON(&requestDto)
 
 	// Log error if occurs
@@ -64,15 +75,21 @@ func (CreateHandler) parseRequestBody(
 	return &requestDto, nil
 }
 
+func (CreateHandler) createEntity(
+	requestDto *RequestDto,
+) *entities.Entity {
+	return &entities.Entity{
+		Id:    uuid.New().String(),
+		Value: requestDto.Value,
+		Tag:   requestDto.Tag,
+	}
+}
+
 func (CreateHandler) createResponseDto(
-	data *dto.ResponseDto,
+	entity *entities.Entity,
 ) *dto.ResponseDto {
 	return &dto.ResponseDto{
-		Message: "Succeeded.",
-		Data: entities.Entity{
-			Id:    "asd",
-			Value: data.Value,
-			Tag:   data.Tag,
-		},
+		Message: "Entity is succeessfully created.",
+		Data:    entity,
 	}
 }

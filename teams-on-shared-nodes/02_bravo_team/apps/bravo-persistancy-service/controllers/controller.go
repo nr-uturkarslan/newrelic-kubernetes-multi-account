@@ -7,17 +7,21 @@ import (
 	"github.com/newrelic/go-agent/v3/integrations/nrgin"
 	"github.com/newrelic/go-agent/v3/newrelic"
 
+	"bravo-persistancy-service/data"
 	create "bravo-persistancy-service/services/create"
 )
 
 func CreateHandlers(
 	router *gin.Engine,
 	nrapp *newrelic.Application,
+	dbClient *data.DbClient,
 ) {
 
 	router.Use(nrgin.Middleware(nrapp))
 
-	createHandler := create.CreateHandler{}
+	createHandler := create.CreateHandler{
+		DbClient: dbClient,
+	}
 
 	proxy := router.Group("/persistancy")
 	{
