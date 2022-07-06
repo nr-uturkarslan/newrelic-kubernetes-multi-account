@@ -1,0 +1,6 @@
+name: redis
+
+image: redis:latest
+port: 6379
+
+replicas: 2
