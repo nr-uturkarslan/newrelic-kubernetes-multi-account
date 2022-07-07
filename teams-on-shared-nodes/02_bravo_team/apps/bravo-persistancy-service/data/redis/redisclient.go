@@ -15,23 +15,35 @@ type RedisClient struct {
 }
 
 func CreateRedisInstance() *RedisClient {
+
+	// Connect to Redis
+	commons.Log(zerolog.InfoLevel, "Connecting to Redis...")
+
 	client := redis.NewClient(&redis.Options{
 		Addr:     "redis.bravo.svc.cluster.local:6379",
 		Password: "",
 		DB:       0,
 	})
 
-	_, err := client.Ping().Result()
+	// Ping Redis
+	pong, err := client.Ping().Result()
+	commons.Log(zerolog.InfoLevel, "Ping?"+pong)
+
+	// Panic if ping fails
 	if err != nil {
 		message := "Connecting to Redis is failed."
+		commons.Log(zerolog.PanicLevel, err.Error())
 		commons.Log(zerolog.PanicLevel, message)
 		panic(message)
 	}
 
-	// Create the Mongo DB instance
+	// Create the Redis instance
 	var redis *RedisClient = &RedisClient{
 		RedisClient: client,
 	}
+
+	commons.Log(zerolog.InfoLevel, "Connected to Redis successfully.")
+
 	return redis
 }
 

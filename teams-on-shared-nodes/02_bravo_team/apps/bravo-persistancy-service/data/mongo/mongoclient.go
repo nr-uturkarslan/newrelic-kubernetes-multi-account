@@ -21,17 +21,19 @@ type MongoDbClient struct {
 func CreateMongoDbInstance() (mdb *MongoDbClient) {
 
 	// Connect to Mongo DB
-	client, err := mongo.Connect(context.TODO(),
-		options.Client().ApplyURI("mongodb://mongodb.bravo.svc.cluster.local:27017"))
+	commons.Log(zerolog.InfoLevel, "Connecting to Mongo DB...")
 
-	// Log error if can't connect to DB
+	client, err := mongo.Connect(context.TODO(),
+		options.Client().ApplyURI("mongodb://mongo.bravo.svc.cluster.local:27017"))
+
+	// Panic if connection fails
 	if err != nil {
 		message := "Connecting to Mongo DB is failed."
 		commons.Log(zerolog.PanicLevel, message)
 		panic(message)
 	}
 
-	// Log error if can't ping to DB
+	// Panic if ping fails
 	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
 		message := "Ping to Mongo DB is failed."
 		commons.Log(zerolog.PanicLevel, message)
@@ -42,6 +44,8 @@ func CreateMongoDbInstance() (mdb *MongoDbClient) {
 	var mongoDb *MongoDbClient = &MongoDbClient{
 		valuesCollection: client.Database("mycustomdb").Collection("values"),
 	}
+
+	commons.Log(zerolog.InfoLevel, "Connected to Mongo DB successfully.")
 
 	return mongoDb
 }
