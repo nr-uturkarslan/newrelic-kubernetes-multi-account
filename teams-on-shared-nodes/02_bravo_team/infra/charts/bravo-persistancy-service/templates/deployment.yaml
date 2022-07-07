@@ -20,7 +20,10 @@ spec:
               containerPort: {{ .Values.port }}
           env:
             - name: NEWRELIC_LICENSE_KEY
-              value: {{ .Values.newRelicLicensekey }}
+              valueFrom:
+                secretKeyRef:
+                  name: newrelic-license-key
+                  key: license
           resources:
             requests:
               cpu: 200m

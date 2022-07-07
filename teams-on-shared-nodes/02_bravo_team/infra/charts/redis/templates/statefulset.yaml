@@ -54,8 +54,8 @@ spec:
       - name: config-map
         configMap:
           name: {{ .Values.name }}
-      nodeSelector:
-        nodePoolName: {{ .Values.nodeSelector }}
+      # nodeSelector:
+      #   nodePoolName: {{ .Values.nodeSelector }}
   volumeClaimTemplates:
   - metadata:
       name: redis-claim
