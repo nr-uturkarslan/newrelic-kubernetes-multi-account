@@ -1,6 +1,6 @@
 name: redis
 
-image: redis:latest
+image: redis
 port: 6379
 
 replicas: 2
