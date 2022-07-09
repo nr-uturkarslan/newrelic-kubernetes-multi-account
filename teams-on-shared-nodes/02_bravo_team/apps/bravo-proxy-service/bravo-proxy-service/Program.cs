@@ -1,8 +1,16 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using bravo_proxy_service.Services.Persistancy;
+using bravo_proxy_service.Services.Persistancy.Handlers;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<ICreateValueHandler, CreateValueHandler>();
+builder.Services.AddScoped<IPersistancyService, PersistancyService>();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,5 +28,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
-
+app.Run("http://*:8080");

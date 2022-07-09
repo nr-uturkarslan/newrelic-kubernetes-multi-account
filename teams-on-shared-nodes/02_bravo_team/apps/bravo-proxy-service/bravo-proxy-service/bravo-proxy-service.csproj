@@ -9,6 +9,28 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NewRelic.Agent" Version="9.9.0" />
+    <PackageReference Include="NewRelic.Agent.Api" Version="9.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="NewRelic.Agent" />
+    <None Remove="NewRelic.Agent.Api" />
+    <None Remove="Services\" />
+    <None Remove="Services\Persistancy\" />
+    <None Remove="Dtos\" />
+    <None Remove="Services\Persistancy\Dtos\" />
+    <None Remove="Services\Persistancy\Data\" />
+    <None Remove="Services\Persistancy\Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Services\Persistancy\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Services\Persistancy\Dtos\" />
+    <Folder Include="Services\Persistancy\Data\" />
+    <Folder Include="Services\Persistancy\Handlers\" />
+  </ItemGroup>
 </Project>
