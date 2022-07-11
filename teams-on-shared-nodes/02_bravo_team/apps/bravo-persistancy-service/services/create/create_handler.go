@@ -18,7 +18,7 @@ type CreateHandler struct {
 	DbClient *data.DbClient
 }
 
-func (handler CreateHandler) Create(
+func (handler CreateHandler) Run(
 	ginctx *gin.Context,
 ) {
 
@@ -52,12 +52,12 @@ func (handler CreateHandler) Create(
 func (CreateHandler) parseRequestBody(
 	ginctx *gin.Context,
 ) (
-	*RequestDto,
+	*CreateRequestDto,
 	error,
 ) {
 
 	// Parse request body
-	var requestDto RequestDto
+	var requestDto CreateRequestDto
 	err := ginctx.BindJSON(&requestDto)
 
 	// Log error if occurs
@@ -76,7 +76,7 @@ func (CreateHandler) parseRequestBody(
 }
 
 func (CreateHandler) createEntity(
-	requestDto *RequestDto,
+	requestDto *CreateRequestDto,
 ) *entities.Entity {
 	return &entities.Entity{
 		Id:    uuid.New().String(),
@@ -88,8 +88,17 @@ func (CreateHandler) createEntity(
 func (CreateHandler) createResponseDto(
 	entity *entities.Entity,
 ) *dto.ResponseDto {
+
+	data := &CreateResponseDto{
+		Value: &Value{
+			Id:    entity.Id,
+			Value: entity.Value,
+			Tag:   entity.Tag,
+		},
+	}
+
 	return &dto.ResponseDto{
 		Message: "Entity is successfully created.",
-		Data:    entity,
+		Data:    data,
 	}
 }

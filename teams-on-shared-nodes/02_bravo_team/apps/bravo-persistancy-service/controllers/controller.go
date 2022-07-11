@@ -9,6 +9,7 @@ import (
 
 	"bravo-persistancy-service/data"
 	create "bravo-persistancy-service/services/create"
+	"bravo-persistancy-service/services/list"
 )
 
 func CreateHandlers(
@@ -23,6 +24,10 @@ func CreateHandlers(
 		DbClient: dbClient,
 	}
 
+	listHandler := list.ListHandler{
+		DbClient: dbClient,
+	}
+
 	proxy := router.Group("/persistancy")
 	{
 		// Health check
@@ -33,6 +38,9 @@ func CreateHandlers(
 		})
 
 		// Create method
-		proxy.POST("/create", createHandler.Create)
+		proxy.POST("/create", createHandler.Run)
+
+		// List method
+		proxy.GET("/list", listHandler.Run)
 	}
 }

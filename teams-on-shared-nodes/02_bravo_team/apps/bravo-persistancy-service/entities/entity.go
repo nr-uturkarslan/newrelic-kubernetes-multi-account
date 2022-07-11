@@ -1,7 +1,7 @@
 package entities
 
 type Entity struct {
-	Id    string `json:"id"`
-	Value string `json:"value"`
-	Tag   string `json:"tag"`
+	Id    string `bson:"_id"`
+	Value string `bson:"value"`
+	Tag   string `bson:"tag"`
 }

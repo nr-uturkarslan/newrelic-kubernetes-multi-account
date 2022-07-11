@@ -15,7 +15,7 @@ func CreateDbClient() *DbClient {
 
 	var dbClient *DbClient = &DbClient{
 		MongoDbClient: mongo.CreateMongoDbInstance(),
-		RedisClient:   redis.CreateRedisInstance(),
+		RedisClient:   nil, //redis.CreateRedisInstance(),
 	}
 	return dbClient
 }
@@ -30,6 +30,21 @@ func (dbClient DbClient) Insert(
 		return err
 	}
 
-	err = dbClient.RedisClient.Insert(entity)
-	return err
+	return nil
+	// err = dbClient.RedisClient.Insert(entity)
+	// return err
+}
+
+func (dbClient DbClient) FindAll() (
+	*[]entities.Entity,
+	error,
+) {
+
+	// Retrieve all entities from DB
+	values, err := dbClient.MongoDbClient.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return values, nil
 }
