@@ -23,7 +23,7 @@ func (handler CreateHandler) Create(
 ) {
 
 	// Log start of method execution
-	commons.Log(zerolog.InfoLevel, "Create method is triggered...")
+	commons.LogWithContext(ginctx, zerolog.InfoLevel, "Create method is triggered...")
 
 	// Parse request body
 	requestBody, err := handler.parseRequestBody(ginctx)
@@ -46,7 +46,7 @@ func (handler CreateHandler) Create(
 		handler.createResponseDto(entity))
 
 	// Log end of method execution
-	commons.Log(zerolog.InfoLevel, "Create method is executed.")
+	commons.LogWithContext(ginctx, zerolog.InfoLevel, "Create method is executed.")
 }
 
 func (CreateHandler) parseRequestBody(
@@ -69,8 +69,8 @@ func (CreateHandler) parseRequestBody(
 	}
 
 	// Log provided values
-	commons.Log(zerolog.InfoLevel, "Value provided: "+requestDto.Value)
-	commons.Log(zerolog.InfoLevel, "Tag provided: "+requestDto.Tag)
+	commons.LogWithContext(ginctx, zerolog.InfoLevel, "Value provided: "+requestDto.Value)
+	commons.LogWithContext(ginctx, zerolog.InfoLevel, "Tag provided: "+requestDto.Tag)
 
 	return &requestDto, nil
 }
