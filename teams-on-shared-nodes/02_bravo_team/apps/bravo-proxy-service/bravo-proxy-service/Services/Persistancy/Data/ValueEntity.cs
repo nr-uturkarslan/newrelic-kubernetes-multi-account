@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace bravo_proxy_service.Services.Persistancy.Data;
 
 public class ValueEntity
 {
-    [JsonProperty("id")]
-    public Guid Id { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 
-    [JsonProperty("value")]
-    public string? Value { get; set; }
+    [JsonPropertyName("value")]
+    public string Value { get; set; }
 
-    [JsonProperty("tag")]
-    public string? Tag { get; set; }
+    [JsonPropertyName("tag")]
+    public string Tag { get; set; }
 }
 

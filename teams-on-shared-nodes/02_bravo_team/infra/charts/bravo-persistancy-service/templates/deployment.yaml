@@ -24,6 +24,8 @@ spec:
                 secretKeyRef:
                   name: newrelic-license-key
                   key: license
+            - name: NEWRELIC_APP_NAME
+              value: {{ .Values.newRelicAppName }}
           resources:
             requests:
               cpu: 200m

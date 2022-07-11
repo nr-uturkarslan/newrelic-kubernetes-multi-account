@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using bravo_proxy_service.Dtos;
 using bravo_proxy_service.Services.Persistancy.Data;
 using bravo_proxy_service.Services.Persistancy.Dtos;
 using Newtonsoft.Json;
@@ -35,34 +36,49 @@ public class CreateValueHandler : ICreateValueHandler
         CreateValueRequestDto requestDto
     )
     {
-        try
-        {
-            var responseMessage = await PerformHttpRequest(requestDto);
-            return await ParseResponseMessage(responseMessage);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return null;
-        }
+        var requestDtoAsString = ParseRequestDto(requestDto);
+        var responseMessage = PerformHttpRequest(requestDtoAsString);
+        return await ParseResponseMessage(responseMessage);
     }
 
-    private async Task<HttpResponseMessage> PerformHttpRequest(
+    private string ParseRequestDto(
         CreateValueRequestDto requestDto
     )
     {
         _logger.LogInformation("Parsing request DTO...");
 
+        var requestDtoAsString = JsonConvert.SerializeObject(requestDto);
+
+        _logger.LogInformation("Request DTO is parsed successfully");
+
+        return requestDtoAsString;
+    }
+
+    private HttpResponseMessage PerformHttpRequest(
+        string requestDtoAsString
+    )
+    {
+        _logger.LogInformation("Performing web request...");
+
         var stringContent = new StringContent(
-            JsonConvert.SerializeObject(requestDto),
+            requestDtoAsString,
             Encoding.UTF8,
             "application/json"
         );
 
-        _logger.LogInformation("Request DTO is parsed successfully");
+        var httpRequest = new HttpRequestMessage(
+            HttpMethod.Post,
+            PERSISTANCY_CREATE_URI
+        )
+        {
+            Content = stringContent
+        };
 
-        return await _httpClient.PostAsync(
-            PERSISTANCY_CREATE_URI, stringContent);
+        var response = _httpClient.Send(httpRequest);
+
+        _logger.LogInformation("Web request is performed successfully");
+
+        return response;
     }
 
     private async Task<ValueEntity> ParseResponseMessage(
@@ -72,9 +88,11 @@ public class CreateValueHandler : ICreateValueHandler
         _logger.LogInformation("Parsing response DTO...");
         var responseBody = await responseMessage.Content.ReadAsStringAsync();
 
-        var value = JsonConvert.DeserializeObject<ValueEntity>(responseBody);
+        _logger.LogInformation($"Response body: {responseBody}");
+
+        var value = JsonConvert.DeserializeObject<ResponseDto<ValueEntity>>(responseBody);
         _logger.LogInformation("Response DTO is parsed successfully");
 
-        return value;
+        return value.Data;
     }
 }

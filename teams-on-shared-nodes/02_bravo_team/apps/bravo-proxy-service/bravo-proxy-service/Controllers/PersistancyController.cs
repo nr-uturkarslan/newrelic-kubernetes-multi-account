@@ -22,7 +22,7 @@ public class PersistancyController
 
     [HttpPost(Name = "CreateValue")]
     [Route("create")]
-    public OkObjectResult Create(
+    public IActionResult Create(
         [FromBody] CreateValueRequestDto requestDto
     )
     {
