@@ -70,8 +70,6 @@ func (mdb MongoDbClient) Insert(
 	}
 
 	id := fmt.Sprintf("value: %v", result.InsertedID)
-	entity.Id = id
-
 	commons.Log(zerolog.InfoLevel, "Document with ID:"+id+"is created successfully")
 
 	return nil

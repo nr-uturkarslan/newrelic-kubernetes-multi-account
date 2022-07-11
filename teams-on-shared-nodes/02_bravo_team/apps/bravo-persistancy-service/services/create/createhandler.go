@@ -89,7 +89,7 @@ func (CreateHandler) createResponseDto(
 	entity *entities.Entity,
 ) *dto.ResponseDto {
 	return &dto.ResponseDto{
-		Message: "Entity is succeessfully created.",
+		Message: "Entity is successfully created.",
 		Data:    entity,
 	}
 }

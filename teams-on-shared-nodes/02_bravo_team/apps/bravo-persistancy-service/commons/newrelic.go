@@ -13,7 +13,7 @@ func CreateNewRelicAgent() *newrelic.Application {
 
 	os.Setenv("NEW_RELIC_ENABLED", "true")
 	os.Setenv("NEW_RELIC_LICENSE_KEY", os.Getenv("NEWRELIC_LICENSE_KEY"))
-	os.Setenv("NEW_RELIC_APP_NAME", "bravo-persistancy-service")
+	os.Setenv("NEW_RELIC_APP_NAME", os.Getenv("NEWRELIC_APP_NAME"))
 	os.Setenv("NEW_RELIC_DISTRIBUTED_TRACING_ENABLED", "true")
 	os.Setenv("NEW_RELIC_LOG", "stdout")
 	// os.Setenv("NEW_RELIC_LOG_LEVEL", "debug")
