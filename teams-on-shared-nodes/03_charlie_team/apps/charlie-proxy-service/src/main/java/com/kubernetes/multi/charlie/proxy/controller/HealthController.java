@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("proxy")
+@RequestMapping("proxy/health")
 public class HealthController {
 
     private final Logger logger = LoggerFactory.getLogger(HealthController.class);
 
-    @GetMapping("health")
+    @GetMapping()
     public ResponseEntity<ResponseDto<String>> checkHealth(
             @RequestParam String name
     ) {

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("persistence")
+@RequestMapping("proxy/persistence")
 public class PersistenceController {
 
     private final Logger logger = LoggerFactory.getLogger(PersistenceController.class);
