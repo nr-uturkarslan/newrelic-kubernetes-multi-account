@@ -14,7 +14,7 @@ declare -A mongo
 mongo["name"]="mongo"
 mongo["image"]="mongo"
 mongo["port"]=27017
-mongo["replicas"]=2
+mongo["replicas"]=1
 mongo["nodeSelector"]="storage"
 
 # Redis
@@ -29,20 +29,39 @@ redis["nodeSelector"]="storage"
 declare -A persistancy
 persistancy["name"]="persistancy"
 persistancy["imageName"]="persistancy"
+persistancy["appName"]="bravo-persistancy-service"
 persistancy["port"]=8080
-persistancy["replicas"]=2
+persistancy["replicas"]=1
 persistancy["nodeSelector"]="general"
+
+# Input Processor
+declare -A proxy
+proxy["name"]="proxy"
+proxy["imageName"]="proxy"
+proxy["appName"]="bravo-proxy-service"
+proxy["port"]=8080
+proxy["replicas"]=1
+proxy["nodePoolName"]="general"
 
 ####################
 ### Build & Push ###
 ####################
+
+# --platform linux/amd64 \
 
 ### Persistancy
 docker build \
   --tag "${DOCKERHUB_NAME}/${persistancy[imageName]}" \
   "../../apps/bravo-persistancy-service/."
 docker push "${DOCKERHUB_NAME}/${persistancy[imageName]}"
-###
+
+### Proxy
+docker build \
+  --build-arg newRelicAppName=${proxy[appName]} \
+  --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_BRAVO \
+  --tag "${DOCKERHUB_NAME}/${proxy[imageName]}" \
+  "../../apps/bravo-proxy-service/bravo-proxy-service/."
+docker push "${DOCKERHUB_NAME}/${proxy[imageName]}"
 
 #########
 
@@ -78,9 +97,7 @@ helm upgrade mongo \
   --set nodeSelector=${mongo[nodeSelector]} \
   "../charts/mongo"
 
-###################
 ### Persistancy ###
-###################
 helm upgrade ${persistancy[name]} \
   --install \
   --wait \
@@ -90,9 +107,23 @@ helm upgrade ${persistancy[name]} \
   --set name=${persistancy[name]} \
   --set namespace=$namespaceBravo \
   --set imageName=${persistancy[imageName]} \
-  --set namespace=${persistancy[namespace]} \
   --set port=${persistancy[port]} \
+  --set newRelicAppName=${persistancy[appName]} \
   --set newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_BRAVO \
   "../charts/bravo-persistancy-service"
+
+### Proxy ###
+helm upgrade ${proxy[name]} \
+  --install \
+  --wait \
+  --debug \
+  --set dockerhubName=$DOCKERHUB_NAME \
+  --namespace $namespaceBravo \
+  --set name=${proxy[name]} \
+  --set namespace=$namespaceBravo \
+  --set imageName=${proxy[imageName]} \
+  --set nodePoolName=${proxy[nodePoolName]} \
+  --set port=${proxy[port]} \
+  "../charts/bravo-proxy-service"
 
 #########
