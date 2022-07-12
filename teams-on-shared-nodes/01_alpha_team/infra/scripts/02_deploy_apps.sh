@@ -45,20 +45,16 @@ bashLoggerName="bashlogger"
 # --platform linux/amd64 \
 
 # Zookeeper
-echo -e "\n--- Zookeeper ---\n"
 docker build \
   --tag "${DOCKERHUB_NAME}/${zookeeper[name]}" \
   "../../apps/kafka/zookeeper/."
 docker push "${DOCKERHUB_NAME}/${zookeeper[name]}"
-echo -e "\n------\n"
 
 # Kafka
-echo -e "\n--- Kafka ---\n"
 docker build \
   --tag "${DOCKERHUB_NAME}/${kafka[name]}" \
   "../../apps/kafka/kafka/."
 docker push "${DOCKERHUB_NAME}/${kafka[name]}"
-echo -e "\n------\n"
 
 # # Bash Logger
 # docker build \
@@ -154,9 +150,9 @@ helm upgrade ${kafka[name]} \
 # Topic
 echo "Checking topic [${kafka[topic]}] ..."
 
-topicExists=$(kubectl exec -n "${kafka[namespace]}" "${kafka[name]}-0" -it -- bash \
+topicExists=$(kubectl exec -n "$namespaceAlpha" "${kafka[name]}-0" -it -- bash \
   /kafka/bin/kafka-topics.sh \
-  --bootstrap-server "${kafka[name]}.${kafka[namespace]}.svc.cluster.local:${kafka[port]}" \
+  --bootstrap-server "${kafka[name]}.$namespaceAlpha.svc.cluster.local:${kafka[port]}" \
   --list \
   | grep ${kafka[topic]})
 
@@ -165,9 +161,9 @@ if [[ $topicExists == "" ]]; then
   echo " -> Topic does not exist. Creating ..."
   while :
   do
-    isTopicCreated=$(kubectl exec -n "${kafka[namespace]}" "${kafka[name]}-0" -it -- bash \
+    isTopicCreated=$(kubectl exec -n "$namespaceAlpha" "${kafka[name]}-0" -it -- bash \
       /kafka/bin/kafka-topics.sh \
-      --bootstrap-server "${kafka[name]}.${kafka[namespace]}.svc.cluster.local:${kafka[port]}" \
+      --bootstrap-server "${kafka[name]}.$namespaceAlpha.svc.cluster.local:${kafka[port]}" \
       --create \
       --topic ${kafka[topic]} \
       2> /dev/null)
