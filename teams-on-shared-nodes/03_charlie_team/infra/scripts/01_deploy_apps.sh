@@ -42,7 +42,7 @@ proxy["nodePoolName"]="general"
 # Persistence
 docker build \
   --build-arg newRelicAppName=${persistence[appName]} \
-  --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY \
+  --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_CHARLIE \
   --tag "${DOCKERHUB_NAME}/${persistence[imageName]}" \
   "../../apps/charlie-persistence-service/."
 docker push "${DOCKERHUB_NAME}/${persistence[imageName]}"
@@ -50,7 +50,7 @@ docker push "${DOCKERHUB_NAME}/${persistence[imageName]}"
 # Proxy
 docker build \
   --build-arg newRelicAppName=${proxy[appName]} \
-  --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY \
+  --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_CHARLIE \
   --tag "${DOCKERHUB_NAME}/${proxy[imageName]}" \
   "../../apps/charlie-proxy-service/."
 docker push "${DOCKERHUB_NAME}/${proxy[imageName]}"
