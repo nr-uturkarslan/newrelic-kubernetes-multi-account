@@ -28,7 +28,7 @@ redis["nodePoolName"]="storage"
 # Persistancy
 declare -A persistancy
 persistancy["name"]="persistancy"
-persistancy["imageName"]="persistancy"
+persistancy["imageName"]="bravo-persistancy-service"
 persistancy["appName"]="bravo-persistancy-service"
 persistancy["port"]=8080
 persistancy["replicas"]=1
@@ -37,7 +37,7 @@ persistancy["nodePoolName"]="general"
 # Input Processor
 declare -A proxy
 proxy["name"]="proxy"
-proxy["imageName"]="proxy"
+proxy["imageName"]="bravo-proxy-service"
 proxy["appName"]="bravo-proxy-service"
 proxy["port"]=8080
 proxy["replicas"]=1
