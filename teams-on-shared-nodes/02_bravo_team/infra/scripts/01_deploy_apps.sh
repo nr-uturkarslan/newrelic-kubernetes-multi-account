@@ -15,7 +15,7 @@ mongo["name"]="mongo"
 mongo["image"]="mongo"
 mongo["port"]=27017
 mongo["replicas"]=1
-mongo["nodeSelector"]="storage"
+mongo["nodePoolName"]="storage"
 
 # Redis
 declare -A redis
@@ -23,7 +23,7 @@ redis["name"]="redis"
 redis["image"]="redis"
 redis["port"]=6379
 redis["replicas"]=1
-redis["nodeSelector"]="storage"
+redis["nodePoolName"]="storage"
 
 # Persistancy
 declare -A persistancy
@@ -32,7 +32,7 @@ persistancy["imageName"]="persistancy"
 persistancy["appName"]="bravo-persistancy-service"
 persistancy["port"]=8080
 persistancy["replicas"]=1
-persistancy["nodeSelector"]="general"
+persistancy["nodePoolName"]="general"
 
 # Input Processor
 declare -A proxy
@@ -80,7 +80,7 @@ helm upgrade redis \
   --set image=${redis[image]} \
   --set port=${redis[port]} \
   --set replicas=${redis[replicas]} \
-  --set nodeSelector=${redis[nodeSelector]} \
+  --set nodePoolName=${redis[nodePoolName]} \
   "../charts/redis"
 
 ### Mongo ###
@@ -94,7 +94,7 @@ helm upgrade mongo \
   --set image=${mongo[image]} \
   --set port=${mongo[port]} \
   --set replicas=${mongo[replicas]} \
-  --set nodeSelector=${mongo[nodeSelector]} \
+  --set nodePoolName=${mongo[nodePoolName]} \
   "../charts/mongo"
 
 ### Persistancy ###
@@ -108,6 +108,7 @@ helm upgrade ${persistancy[name]} \
   --set namespace=$namespaceBravo \
   --set imageName=${persistancy[imageName]} \
   --set port=${persistancy[port]} \
+  --set nodePoolName=${persistancy[nodePoolName]} \
   --set newRelicAppName=${persistancy[appName]} \
   --set newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_BRAVO \
   "../charts/bravo-persistancy-service"

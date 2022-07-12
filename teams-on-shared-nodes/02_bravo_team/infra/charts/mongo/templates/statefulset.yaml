@@ -37,6 +37,8 @@ spec:
         env:
           - name: MONGO_SIDECAR_POD_LABELS
             value: "app={{ .Values.name }}"
+      # nodeSelector:
+      #   nodePoolName: {{ .Values.nodePoolName }}
   volumeClaimTemplates:
     - metadata:
         name: mongo-persistent-storage
