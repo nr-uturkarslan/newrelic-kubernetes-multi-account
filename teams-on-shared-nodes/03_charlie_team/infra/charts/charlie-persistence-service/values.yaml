@@ -1,4 +1,4 @@
-name: persistancy
+name: persistence
 port: 8080
 
 hpa:
