@@ -69,10 +69,10 @@ public class PersistenceCreateService {
 
         var responseDto = new ResponseDto<CreateRequestDto>();
 
-        responseDto.setMessage("Succeeded.");
-        responseDto.setStatusCode(HttpStatus.OK);
+        responseDto.setMessage("Value is created successfully.");
+        responseDto.setStatusCode(HttpStatus.CREATED);
         responseDto.setData(requestDto);
 
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, responseDto.getStatusCode());
     }
 }
