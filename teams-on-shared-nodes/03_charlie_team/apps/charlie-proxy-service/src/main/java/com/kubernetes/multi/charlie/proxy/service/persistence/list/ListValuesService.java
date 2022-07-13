@@ -45,12 +45,12 @@ public class ListValuesService {
             responseDto.getValues().addAll(responseDtoFromPersistenceService.getBody().getData());
 
             model.setMessage("Values are retrieved successfully.");
-            model.setStatusCode(HttpStatus.OK);
+            model.setStatusCode(HttpStatus.OK.value());
             model.setData(responseDto);
         }
         else {
             model.setMessage("Values are failed to be retrieved.");
-            model.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            model.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
         logger.info("Values are retrieved successfully from persistence service.");
@@ -62,6 +62,6 @@ public class ListValuesService {
         var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/list";
 
         return restTemplate.exchange(url, HttpMethod.GET, null,
-                new ParameterizedTypeReference<>() {});
+                new ParameterizedTypeReference<ResponseDto<List<Value>>>() {});
     }
 }
