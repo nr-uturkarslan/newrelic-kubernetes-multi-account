@@ -25,7 +25,7 @@ func (handler ListHandler) Run(
 	commons.LogWithContext(ginctx, zerolog.InfoLevel, "Create method is triggered...")
 
 	// Retrieve all values DB
-	values, err := handler.DbClient.FindAll()
+	values, err := handler.DbClient.FindAll(ginctx)
 	if err != nil {
 		commons.CreateFailedHttpResponse(ginctx, http.StatusInternalServerError,
 			"Entity could not be saved into the DB.")

@@ -35,7 +35,7 @@ func (handler CreateHandler) Run(
 	entity := handler.createEntity(requestBody)
 
 	// Save entity to DB
-	err = handler.DbClient.Insert(entity)
+	err = handler.DbClient.Insert(ginctx, entity)
 	if err != nil {
 		commons.CreateFailedHttpResponse(ginctx, http.StatusInternalServerError,
 			"Entity could not be saved into the DB.")

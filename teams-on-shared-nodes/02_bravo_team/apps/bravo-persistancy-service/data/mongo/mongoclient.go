@@ -7,6 +7,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
+	"github.com/newrelic/go-agent/_integrations/nrmongo"
+	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/rs/zerolog"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,8 +26,10 @@ func CreateMongoDbInstance() (mdb *MongoDbClient) {
 	// Connect to Mongo DB
 	commons.Log(zerolog.InfoLevel, "Connecting to Mongo DB...")
 
+	nrMon := nrmongo.NewCommandMonitor(nil)
 	client, err := mongo.Connect(context.Background(),
-		options.Client().ApplyURI("mongodb://mongo.bravo.svc.cluster.local:27017"))
+		options.Client().ApplyURI("mongodb://mongo.bravo.svc.cluster.local:27017").
+			SetMonitor(nrMon))
 
 	// Panic if connection fails
 	if err != nil {
@@ -51,12 +56,16 @@ func CreateMongoDbInstance() (mdb *MongoDbClient) {
 }
 
 func (mdb MongoDbClient) Insert(
+	ginctx *gin.Context,
 	entity *entities.Entity,
 ) (
 	err error,
 ) {
 
-	result, err := mdb.valuesCollection.InsertOne(context.Background(), entity)
+	txn := newrelic.FromContext(ginctx)
+	ctx := newrelic.NewContext(context.Background(), txn)
+
+	result, err := mdb.valuesCollection.InsertOne(ctx, entity)
 	if err != nil {
 		commons.Log(zerolog.ErrorLevel, "Insertion to Mongo DB is failed.")
 		return errors.New("insertion to mongo db is failed")
@@ -68,12 +77,17 @@ func (mdb MongoDbClient) Insert(
 	return nil
 }
 
-func (mdb MongoDbClient) FindAll() (
+func (mdb MongoDbClient) FindAll(
+	ginctx *gin.Context,
+) (
 	*[]entities.Entity,
 	error,
 ) {
 
-	cursor, err := mdb.valuesCollection.Find(context.Background(), bson.D{{}})
+	txn := newrelic.FromContext(ginctx)
+	ctx := newrelic.NewContext(context.Background(), txn)
+
+	cursor, err := mdb.valuesCollection.Find(ctx, bson.D{{}})
 	if err != nil {
 		commons.Log(zerolog.ErrorLevel, "Retrieving from Mongo DB is failed.")
 		return nil, errors.New("retrieving from mongo db is failed")
