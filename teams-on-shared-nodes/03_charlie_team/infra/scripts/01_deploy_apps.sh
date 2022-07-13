@@ -41,6 +41,7 @@ proxy["nodePoolName"]="general"
 
 # Persistence
 docker build \
+  --platform linux/amd64 \
   --build-arg newRelicAppName=${persistence[appName]} \
   --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_CHARLIE \
   --tag "${DOCKERHUB_NAME}/${persistence[imageName]}" \
@@ -49,11 +50,16 @@ docker push "${DOCKERHUB_NAME}/${persistence[imageName]}"
 
 # Proxy
 docker build \
+  --platform linux/amd64 \
   --build-arg newRelicAppName=${proxy[appName]} \
   --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_CHARLIE \
   --tag "${DOCKERHUB_NAME}/${proxy[imageName]}" \
   "../../apps/charlie-proxy-service/."
 docker push "${DOCKERHUB_NAME}/${proxy[imageName]}"
+
+##################
+### Deploy K8s ###
+##################
 
 ### Mysql ###
 helm upgrade mysql \
@@ -76,6 +82,7 @@ helm upgrade ${persistence[name]} \
   --debug \
   --namespace $namespaceCharlie \
   --set name=${persistence[name]} \
+  --set namespace=$namespaceCharlie \
   --set imageName=${persistence[imageName]} \
   --set dockerhubName=$DOCKERHUB_NAME \
   --set port=${persistence[port]} \
@@ -89,6 +96,7 @@ helm upgrade ${proxy[name]} \
   --debug \
   --namespace $namespaceCharlie \
   --set name=${proxy[name]} \
+  --set namespace=$namespaceCharlie \
   --set imageName=${proxy[imageName]} \
   --set dockerhubName=$DOCKERHUB_NAME \
   --set port=${proxy[port]} \
