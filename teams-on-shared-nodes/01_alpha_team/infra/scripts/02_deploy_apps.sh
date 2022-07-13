@@ -46,12 +46,14 @@ bashLoggerName="bashlogger"
 
 # Zookeeper
 docker build \
+  --platform linux/amd64 \
   --tag "${DOCKERHUB_NAME}/${zookeeper[name]}" \
   "../../apps/kafka/zookeeper/."
 docker push "${DOCKERHUB_NAME}/${zookeeper[name]}"
 
 # Kafka
 docker build \
+  --platform linux/amd64 \
   --tag "${DOCKERHUB_NAME}/${kafka[name]}" \
   "../../apps/kafka/kafka/."
 docker push "${DOCKERHUB_NAME}/${kafka[name]}"
@@ -123,6 +125,17 @@ helm upgrade nri-logging \
   --set endpoint="https://log-api.eu.newrelic.com/log/v1" \
   "../charts/nri-logging"
 
+### Ingress Controller ###
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx && \
+helm repo update; \
+helm upgrade ingress-nginx \
+  --install \
+  --wait \
+  --debug \
+  --namespace $namespaceAlpha \
+  --set controller.replicaCount=1 \
+  "ingress-nginx/ingress-nginx"
+
 ### Zookeeper ###
 helm upgrade ${zookeeper[name]} \
   --install \
@@ -192,4 +205,4 @@ fi
 #   --set dockerhubName=$DOCKERHUB_NAME \
 #   --set name=$bashLoggerName \
 #   "../charts/$bashLoggerName"
-#########
+# #########
