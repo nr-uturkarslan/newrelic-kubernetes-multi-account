@@ -71,9 +71,9 @@ public class CreateValueService {
         var responseDto = new ResponseDto<CreateValueRequestDto>();
 
         responseDto.setMessage("Value is created successfully.");
-        responseDto.setStatusCode(HttpStatus.CREATED);
+        responseDto.setStatusCode(HttpStatus.CREATED.value());
         responseDto.setData(requestDto);
 
-        return new ResponseEntity<>(responseDto, responseDto.getStatusCode());
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 }

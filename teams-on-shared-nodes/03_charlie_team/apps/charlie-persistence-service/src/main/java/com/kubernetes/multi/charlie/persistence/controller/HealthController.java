@@ -22,11 +22,8 @@ public class HealthController {
 
         var responseDto = new ResponseDto<String>();
         responseDto.setMessage("OK");
-        responseDto.setStatusCode(HttpStatus.OK);
+        responseDto.setStatusCode(HttpStatus.OK.value());
 
-        return new ResponseEntity<>(
-                responseDto,
-                HttpStatus.OK
-        );
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }

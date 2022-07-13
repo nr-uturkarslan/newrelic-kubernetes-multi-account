@@ -31,9 +31,9 @@ public class PersistenceListService {
 
         var responseDto = new ResponseDto<List<Value>>();
         responseDto.setMessage("All values are retrieved successfully.");
-        responseDto.setStatusCode(HttpStatus.OK);
+        responseDto.setStatusCode(HttpStatus.OK.value());
         responseDto.setData(allValues);
 
-        return new ResponseEntity<>(responseDto, responseDto.getStatusCode());
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }

@@ -13,6 +13,6 @@ import org.springframework.http.HttpStatus;
 public class ResponseDto<T> {
 
     private String message;
-    private HttpStatus statusCode;
+    private int statusCode;
     private T data;
 }
