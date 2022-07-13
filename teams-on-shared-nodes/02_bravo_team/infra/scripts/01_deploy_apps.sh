@@ -51,12 +51,14 @@ proxy["nodePoolName"]="general"
 
 ### Persistancy
 docker build \
+  --platform linux/amd64 \
   --tag "${DOCKERHUB_NAME}/${persistancy[imageName]}" \
   "../../apps/bravo-persistancy-service/."
 docker push "${DOCKERHUB_NAME}/${persistancy[imageName]}"
 
 ### Proxy
 docker build \
+  --platform linux/amd64 \
   --build-arg newRelicAppName=${proxy[appName]} \
   --build-arg newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_BRAVO \
   --tag "${DOCKERHUB_NAME}/${proxy[imageName]}" \
@@ -69,19 +71,19 @@ docker push "${DOCKERHUB_NAME}/${proxy[imageName]}"
 ### Deploy K8s ###
 ##################
 
-### Redis ###
-helm upgrade redis \
-  --install \
-  --wait \
-  --debug \
-  --namespace $namespaceBravo \
-  --set name=${redis[name]} \
-  --set namespace=$namespaceBravo \
-  --set image=${redis[image]} \
-  --set port=${redis[port]} \
-  --set replicas=${redis[replicas]} \
-  --set nodePoolName=${redis[nodePoolName]} \
-  "../charts/redis"
+# ### Redis ###
+# helm upgrade redis \
+#   --install \
+#   --wait \
+#   --debug \
+#   --namespace $namespaceBravo \
+#   --set name=${redis[name]} \
+#   --set namespace=$namespaceBravo \
+#   --set image=${redis[image]} \
+#   --set port=${redis[port]} \
+#   --set replicas=${redis[replicas]} \
+#   --set nodePoolName=${redis[nodePoolName]} \
+#   "../charts/redis"
 
 ### Mongo ###
 helm upgrade mongo \
