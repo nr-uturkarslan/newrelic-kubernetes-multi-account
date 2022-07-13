@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace bravo_proxy_service.Services.Persistancy.Dtos;
+namespace bravo_proxy_service.Services.Persistancy.Handlers.Create.Dtos;
 
 public class CreateValueRequestDto
 {

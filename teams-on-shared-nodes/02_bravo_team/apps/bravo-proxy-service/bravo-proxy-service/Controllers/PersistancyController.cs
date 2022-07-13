@@ -1,5 +1,5 @@
 ﻿using bravo_proxy_service.Services.Persistancy;
-using bravo_proxy_service.Services.Persistancy.Dtos;
+using bravo_proxy_service.Services.Persistancy.Handlers.Create.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bravo_proxy_service.Controllers;
@@ -22,13 +22,24 @@ public class PersistancyController
 
     [HttpPost(Name = "CreateValue")]
     [Route("create")]
-    public IActionResult Create(
+    public async Task<IActionResult> Create(
         [FromBody] CreateValueRequestDto requestDto
     )
     {
         _logger.LogInformation("CreateValue endpoint is triggered...");
 
-        var responseDto = _persistancyService.Create(requestDto);
+        var responseDto = await _persistancyService.Create(requestDto);
+
+        return new CreatedResult($"{responseDto.Data.Value.Id}", responseDto);
+    }
+
+    [HttpGet(Name = "ListValues")]
+    [Route("list")]
+    public async Task<IActionResult> List()
+    {
+        _logger.LogInformation("ListValues endpoint is triggered...");
+
+        var responseDto = await _persistancyService.List();
 
         return new OkObjectResult(responseDto);
     }

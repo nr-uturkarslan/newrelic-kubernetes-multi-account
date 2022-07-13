@@ -1,14 +1,13 @@
 ﻿using System.Text;
 using bravo_proxy_service.Dtos;
-using bravo_proxy_service.Services.Persistancy.Data;
-using bravo_proxy_service.Services.Persistancy.Dtos;
+using bravo_proxy_service.Services.Persistancy.Handlers.Create.Dtos;
 using Newtonsoft.Json;
 
-namespace bravo_proxy_service.Services.Persistancy.Handlers;
+namespace bravo_proxy_service.Services.Persistancy.Handlers.Create;
 
 public interface ICreateValueHandler
 {
-    Task<ValueEntity> Run(
+    Task<CreateValueResponseDto> Run(
         CreateValueRequestDto requestDto
     );
 }
@@ -32,7 +31,7 @@ public class CreateValueHandler : ICreateValueHandler
         _httpClient = factory.CreateClient();
     }
 
-    public async Task<ValueEntity> Run(
+    public async Task<CreateValueResponseDto> Run(
         CreateValueRequestDto requestDto
     )
     {
@@ -81,7 +80,7 @@ public class CreateValueHandler : ICreateValueHandler
         return response;
     }
 
-    private async Task<ValueEntity> ParseResponseMessage(
+    private async Task<CreateValueResponseDto> ParseResponseMessage(
         HttpResponseMessage responseMessage
     )
     {
@@ -90,9 +89,9 @@ public class CreateValueHandler : ICreateValueHandler
 
         _logger.LogInformation($"Response body: {responseBody}");
 
-        var value = JsonConvert.DeserializeObject<ResponseDto<ValueEntity>>(responseBody);
+        var responseDto = JsonConvert.DeserializeObject<ResponseDto<CreateValueResponseDto>>(responseBody);
         _logger.LogInformation("Response DTO is parsed successfully");
 
-        return value.Data;
+        return responseDto.Data;
     }
 }

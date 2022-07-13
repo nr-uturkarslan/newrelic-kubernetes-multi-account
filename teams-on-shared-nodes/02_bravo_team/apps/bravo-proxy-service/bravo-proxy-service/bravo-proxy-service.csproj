@@ -23,19 +23,25 @@
     <None Remove="Services\" />
     <None Remove="Services\Persistancy\" />
     <None Remove="Dtos\" />
-    <None Remove="Services\Persistancy\Dtos\" />
     <None Remove="Services\Persistancy\Data\" />
     <None Remove="Services\Persistancy\Handlers\" />
     <None Remove="Microsoft.AspNet.WebApi.Client" />
     <None Remove="System.Text.Json" />
     <None Remove="Microsoft.AspNetCore.Mvc" />
+    <None Remove="Services\Persistancy\Handlers\Create\" />
+    <None Remove="Services\Persistancy\Handlers\Create\Dtos\" />
+    <None Remove="Services\Persistancy\Handlers\List\" />
+    <None Remove="Services\Persistancy\Handlers\List\Dtos\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Services\Persistancy\" />
     <Folder Include="Dtos\" />
-    <Folder Include="Services\Persistancy\Dtos\" />
     <Folder Include="Services\Persistancy\Data\" />
     <Folder Include="Services\Persistancy\Handlers\" />
+    <Folder Include="Services\Persistancy\Handlers\Create\" />
+    <Folder Include="Services\Persistancy\Handlers\Create\Dtos\" />
+    <Folder Include="Services\Persistancy\Handlers\List\" />
+    <Folder Include="Services\Persistancy\Handlers\List\Dtos\" />
   </ItemGroup>
 </Project>
