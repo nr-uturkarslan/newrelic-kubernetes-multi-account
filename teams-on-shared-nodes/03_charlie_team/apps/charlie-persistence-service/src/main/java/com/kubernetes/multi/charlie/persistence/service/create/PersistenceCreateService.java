@@ -33,8 +33,8 @@ public class PersistenceCreateService {
     {
         newRelicTracer.track(record);
 
-        logger.info("Tag: " + record.key());
         logger.info("Value: " + record.value());
+        logger.info("Tag: " + record.key());
 
         var value = new Value();
         value.setId(UUID.randomUUID());

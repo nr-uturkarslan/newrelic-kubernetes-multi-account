@@ -2,6 +2,7 @@ package com.kubernetes.multi.charlie.proxy.service.persistence.create;
 
 import com.kubernetes.multi.charlie.proxy.common.NewRelicTracer;
 import com.kubernetes.multi.charlie.proxy.dto.ResponseDto;
+import com.kubernetes.multi.charlie.proxy.service.persistence.create.dto.CreateValueRequestDto;
 import com.newrelic.api.agent.Trace;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -13,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersistenceCreateService {
+public class CreateValueService {
 
     private final String TOPIC = "charlie";
-    private final Logger logger = LoggerFactory.getLogger(PersistenceCreateService.class);
+    private final Logger logger = LoggerFactory.getLogger(CreateValueService.class);
 
     @Autowired
     private KafkaProducer<String, String> producer;
@@ -24,11 +25,11 @@ public class PersistenceCreateService {
     @Autowired
     private NewRelicTracer newRelicTracer;
 
-    public PersistenceCreateService() {}
+    public CreateValueService() {}
 
     @Trace(dispatcher = true)
-    public ResponseEntity<ResponseDto<CreateRequestDto>> run(
-        CreateRequestDto requestDto
+    public ResponseEntity<ResponseDto<CreateValueRequestDto>> run(
+        CreateValueRequestDto requestDto
     )
     {
         // Create Kafka producer record
@@ -49,7 +50,7 @@ public class PersistenceCreateService {
     }
 
     private ProducerRecord<String, String> createProducerRecord(
-        CreateRequestDto requestDto
+        CreateValueRequestDto requestDto
     ) {
         var record = new ProducerRecord<>(
             TOPIC,
@@ -62,12 +63,12 @@ public class PersistenceCreateService {
         return record;
     }
 
-    private ResponseEntity<ResponseDto<CreateRequestDto>> createResponseDto(
-        CreateRequestDto requestDto
+    private ResponseEntity<ResponseDto<CreateValueRequestDto>> createResponseDto(
+        CreateValueRequestDto requestDto
     ) {
         logger.info("Request is successfully processed.");
 
-        var responseDto = new ResponseDto<CreateRequestDto>();
+        var responseDto = new ResponseDto<CreateValueRequestDto>();
 
         responseDto.setMessage("Value is created successfully.");
         responseDto.setStatusCode(HttpStatus.CREATED);

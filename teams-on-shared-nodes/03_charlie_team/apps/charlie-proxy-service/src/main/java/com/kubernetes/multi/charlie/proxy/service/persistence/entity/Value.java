@@ -1,4 +1,4 @@
-package com.kubernetes.multi.charlie.proxy.service.persistence.create;
+package com.kubernetes.multi.charlie.proxy.service.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateRequestDto {
+public class Value {
 
+    private String id;
     private String value;
     private String tag;
 }
