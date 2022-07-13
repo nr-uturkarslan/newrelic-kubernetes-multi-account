@@ -11,7 +11,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /{{ .Values.name }}(/|$)(.*)
+      - path: /{{ .Values.namespace }}/{{ .Values.name }}(/|$)(.*)
         pathType: Prefix
         backend:
           service:
