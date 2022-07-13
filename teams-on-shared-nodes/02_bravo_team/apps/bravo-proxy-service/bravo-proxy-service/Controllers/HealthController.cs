@@ -8,20 +8,13 @@ namespace bravo_proxy_service.Controllers;
 [Route("[controller]")]
 public class HealthController : ControllerBase
 {
-    private readonly ILogger<HealthController> _logger;
+    public HealthController() {
 
-    public HealthController(
-        ILogger<HealthController> logger
-    )
-    {
-        _logger = logger;
     }
 
     [HttpGet(Name = "HealthCheck")]
     public OkObjectResult CheckHealth()
     {
-        _logger.LogInformation("OK");
-
         var responseDto = new ResponseDto<string>
         {
             Message = "OK",
