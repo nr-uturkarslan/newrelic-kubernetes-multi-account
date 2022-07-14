@@ -33,5 +33,5 @@ spec:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: {{ .Values.name }}-pv-claim
-      # nodeSelector:
-      #   nodePoolName: {{ .Values.nodePoolName }}
+      nodeSelector:
+        nodePoolName: {{ .Values.nodePoolName }}
