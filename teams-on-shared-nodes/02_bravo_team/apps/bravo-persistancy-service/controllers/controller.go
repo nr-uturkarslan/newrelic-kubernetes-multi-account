@@ -8,7 +8,8 @@ import (
 	"github.com/newrelic/go-agent/v3/newrelic"
 
 	"bravo-persistancy-service/data"
-	create "bravo-persistancy-service/services/create"
+	"bravo-persistancy-service/services/create"
+	"bravo-persistancy-service/services/delete"
 	"bravo-persistancy-service/services/list"
 )
 
@@ -28,6 +29,10 @@ func CreateHandlers(
 		DbClient: dbClient,
 	}
 
+	deleteHandler := delete.DeleteHandler{
+		DbClient: dbClient,
+	}
+
 	proxy := router.Group("/persistancy")
 	{
 		// Health check
@@ -42,5 +47,8 @@ func CreateHandlers(
 
 		// List method
 		proxy.GET("/list", listHandler.Run)
+
+		// Delete method
+		proxy.DELETE("/delete", deleteHandler.Run)
 	}
 }

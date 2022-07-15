@@ -40,16 +40,31 @@ func (dbClient DbClient) Insert(
 
 func (dbClient DbClient) FindAll(
 	ginctx *gin.Context,
+	limit *int64,
 ) (
 	*[]entities.Entity,
 	error,
 ) {
 
 	// Retrieve all entities from DB
-	values, err := dbClient.MongoDbClient.FindAll(ginctx)
+	values, err := dbClient.MongoDbClient.FindAll(ginctx, limit)
 	if err != nil {
 		return nil, err
 	}
 
 	return values, nil
+}
+
+func (dbClient DbClient) Delete(
+	ginctx *gin.Context,
+	entityId string,
+) error {
+
+	// Retrieve all entities from DB
+	err := dbClient.MongoDbClient.Delete(ginctx, entityId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
