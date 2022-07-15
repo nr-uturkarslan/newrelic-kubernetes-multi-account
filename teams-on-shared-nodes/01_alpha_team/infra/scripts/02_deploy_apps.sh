@@ -125,6 +125,17 @@ helm upgrade nri-logging \
   --set endpoint="https://log-api.eu.newrelic.com/log/v1" \
   "../charts/nri-logging"
 
+### New Relic Metadata ###
+helm dependency update "../charts/nri-metadata-injection"
+helm upgrade nri-metadata-injection \
+  --install \
+  --wait \
+  --debug \
+  --namespace $namespaceAlpha \
+  --set global.cluster=$clusterName \
+  --set licenseKey=$NEWRELIC_LICENSE_KEY_ALPHA \
+  "../charts/nri-metadata-injection"
+
 ### Ingress Controller ###
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx && \
 helm repo update; \
