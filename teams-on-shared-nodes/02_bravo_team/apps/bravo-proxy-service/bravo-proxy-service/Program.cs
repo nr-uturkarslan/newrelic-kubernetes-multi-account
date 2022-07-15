@@ -1,5 +1,6 @@
 ﻿using bravo_proxy_service.Services.Persistancy;
 using bravo_proxy_service.Services.Persistancy.Handlers.Create;
+using bravo_proxy_service.Services.Persistancy.Handlers.Delete;
 using bravo_proxy_service.Services.Persistancy.Handlers.List;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<ICreateValueHandler, CreateValueHandler>();
 builder.Services.AddScoped<IListValueHandler, ListValueHandler>();
+builder.Services.AddScoped<IDeleteValueHandler, DeleteValueHandler>();
 builder.Services.AddScoped<IPersistancyService, PersistancyService>();
 
 builder.Services.AddControllers();

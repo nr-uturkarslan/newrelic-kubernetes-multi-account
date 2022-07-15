@@ -43,4 +43,17 @@ public class PersistancyController
 
         return new OkObjectResult(responseDto);
     }
+
+    [HttpDelete(Name = "DeleteValue")]
+    [Route("delete")]
+    public async Task<IActionResult> Delete(
+        [FromQuery] string id
+    )
+    {
+        _logger.LogInformation("DeleteValue endpoint is triggered...");
+
+        var responseDto = _persistancyService.Delete(id);
+
+        return new OkObjectResult(responseDto);
+    }
 }

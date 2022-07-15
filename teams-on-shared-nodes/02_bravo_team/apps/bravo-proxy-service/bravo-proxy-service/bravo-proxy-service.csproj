@@ -32,6 +32,8 @@
     <None Remove="Services\Persistancy\Handlers\Create\Dtos\" />
     <None Remove="Services\Persistancy\Handlers\List\" />
     <None Remove="Services\Persistancy\Handlers\List\Dtos\" />
+    <None Remove="Services\Persistancy\Handlers\Delete\" />
+    <None Remove="Services\Persistancy\Handlers\Delete\Dtos\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -43,5 +45,7 @@
     <Folder Include="Services\Persistancy\Handlers\Create\Dtos\" />
     <Folder Include="Services\Persistancy\Handlers\List\" />
     <Folder Include="Services\Persistancy\Handlers\List\Dtos\" />
+    <Folder Include="Services\Persistancy\Handlers\Delete\" />
+    <Folder Include="Services\Persistancy\Handlers\Delete\Dtos\" />
   </ItemGroup>
 </Project>
