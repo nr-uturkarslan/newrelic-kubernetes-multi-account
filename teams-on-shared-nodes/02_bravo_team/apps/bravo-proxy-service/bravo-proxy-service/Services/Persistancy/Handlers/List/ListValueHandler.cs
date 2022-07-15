@@ -6,7 +6,9 @@ namespace bravo_proxy_service.Services.Persistancy.Handlers.List;
 
 public interface IListValueHandler
 {
-    Task<ListValueResponseDto> Run();
+    Task<ListValueResponseDto> Run(
+        int? limit
+    );
 }
 
 public class ListValueHandler : IListValueHandler
@@ -28,19 +30,27 @@ public class ListValueHandler : IListValueHandler
         _httpClient = factory.CreateClient();
     }
 
-    public async Task<ListValueResponseDto> Run()
+    public async Task<ListValueResponseDto> Run(
+        int? limit
+    )
     {
-        var responseMessage = PerformHttpRequest();
+        var responseMessage = PerformHttpRequest(limit);
         return await ParseResponseMessage(responseMessage);
     }
 
-    private HttpResponseMessage PerformHttpRequest()
+    private HttpResponseMessage PerformHttpRequest(
+        int? limit
+    )
     {
         _logger.LogInformation("Performing web request...");
 
+        var url = limit != null ?
+            $"{PERSISTANCY_LIST_URI}?limit={limit}" :
+            PERSISTANCY_LIST_URI;
+
         var httpRequest = new HttpRequestMessage(
             HttpMethod.Get,
-            PERSISTANCY_LIST_URI
+            url
         );
 
         var response = _httpClient.Send(httpRequest);

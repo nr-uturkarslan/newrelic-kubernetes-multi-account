@@ -14,7 +14,9 @@ public interface IPersistancyService
         CreateValueRequestDto requestDto
     );
 
-    Task<ResponseDto<ListValueResponseDto>> List();
+    Task<ResponseDto<ListValueResponseDto>> List(
+        int? limit
+    );
 
     ResponseDto<string> Delete(
         string id
@@ -62,12 +64,14 @@ public class PersistancyService : IPersistancyService
         return responseDto;
     }
 
-    public async Task<ResponseDto<ListValueResponseDto>> List()
+    public async Task<ResponseDto<ListValueResponseDto>> List(
+        int? limit
+    )
     {
         _logger.LogInformation("Retrieving value entities ...");
 
         // Send request to persistancy service.
-        var data = await _listValueHandler.Run();
+        var data = await _listValueHandler.Run(limit);
 
         // Create response DTO.
         var responseDto = new ResponseDto<ListValueResponseDto>
