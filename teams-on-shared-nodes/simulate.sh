@@ -48,7 +48,7 @@ charlieEndpoint="charlie/proxy/persistence"
 
 # Get cluster external IP
 clusterIp=$(kubectl get svc \
-  -n nginx \
+  -n alpha \
   ingress-nginx-controller \
   -o json \
   | jq -r '.status.loadBalancer.ingress[0].ip')
