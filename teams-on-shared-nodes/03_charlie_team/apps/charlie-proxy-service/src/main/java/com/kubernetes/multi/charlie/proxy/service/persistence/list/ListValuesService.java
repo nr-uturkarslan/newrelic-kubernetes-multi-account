@@ -26,12 +26,14 @@ public class ListValuesService {
 
     public ListValuesService() {}
 
-    public ResponseEntity<ResponseDto<ListValuesResponseDto>> run() {
+    public ResponseEntity<ResponseDto<ListValuesResponseDto>> run(
+            Integer limit
+    ) {
         var model = new ResponseDto<ListValuesResponseDto>();
 
         logger.info("Retrieving values from persistence service...");
 
-        var responseDtoFromPersistenceService = makeRequestToPersistenceService();
+        var responseDtoFromPersistenceService = makeRequestToPersistenceService(limit);
 
         var statusCode = responseDtoFromPersistenceService.getStatusCode();
         logger.info("Status code: " + statusCode);
@@ -58,8 +60,10 @@ public class ListValuesService {
         return new ResponseEntity<>(model, statusCode);
     }
 
-    private ResponseEntity<ResponseDto<List<Value>>> makeRequestToPersistenceService() {
-        var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/list";
+    private ResponseEntity<ResponseDto<List<Value>>> makeRequestToPersistenceService(
+            Integer limit
+    ) {
+        var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/list?limit=" + limit;
 
         return restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<ResponseDto<List<Value>>>() {});
