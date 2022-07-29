@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -65,7 +66,12 @@ public class ListValuesService {
     ) {
         var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/list?limit=" + limit;
 
-        return restTemplate.exchange(url, HttpMethod.GET, null,
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        var entity = new HttpEntity<>(null, headers);
+        return restTemplate.exchange(url, HttpMethod.GET, entity,
                 new ParameterizedTypeReference<ResponseDto<List<Value>>>() {});
     }
 }

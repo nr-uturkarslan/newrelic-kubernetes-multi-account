@@ -28,16 +28,27 @@ public class PersistenceListService {
     ) {
         logger.info("Retrieving first " + limit + "values...");
 
-        var allValues = valueRepository.findAll(PageRequest.of(0, limit))
-                .getContent();
+        try {
+            var allValues = valueRepository.findAll(PageRequest.of(0, limit))
+                    .getContent();
 
-        logger.info("First " + limit + " values are retrieved successfully.");
+            logger.info("First " + allValues.size() + " values are retrieved successfully.");
 
-        var responseDto = new ResponseDto<List<Value>>();
-        responseDto.setMessage("First " + limit + " values are retrieved successfully.");
-        responseDto.setStatusCode(HttpStatus.OK.value());
-        responseDto.setData(allValues);
+            var responseDto = new ResponseDto<List<Value>>();
+            responseDto.setMessage("First " + allValues.size() + " values are retrieved successfully.");
+            responseDto.setStatusCode(HttpStatus.OK.value());
+            responseDto.setData(allValues);
 
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            logger.error("First " + limit + " values are failed to be retrieved.");
+
+            var responseDto = new ResponseDto<List<Value>>();
+            responseDto.setMessage("First " + limit + " values are failed to be retrieved.");
+            responseDto.setStatusCode(HttpStatus.OK.value());
+
+            return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
