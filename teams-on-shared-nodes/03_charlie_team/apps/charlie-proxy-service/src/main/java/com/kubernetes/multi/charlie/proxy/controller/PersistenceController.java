@@ -3,6 +3,7 @@ package com.kubernetes.multi.charlie.proxy.controller;
 import com.kubernetes.multi.charlie.proxy.dto.ResponseDto;
 import com.kubernetes.multi.charlie.proxy.service.persistence.create.dto.CreateValueRequestDto;
 import com.kubernetes.multi.charlie.proxy.service.persistence.create.CreateValueService;
+import com.kubernetes.multi.charlie.proxy.service.persistence.delete.DeleteValueService;
 import com.kubernetes.multi.charlie.proxy.service.persistence.list.ListValuesService;
 import com.kubernetes.multi.charlie.proxy.service.persistence.list.dto.ListValuesResponseDto;
 import org.slf4j.Logger;
@@ -23,6 +24,9 @@ public class PersistenceController {
 
     @Autowired
     private ListValuesService listService;
+
+    @Autowired
+    private DeleteValueService deleteService;
 
     @GetMapping("health")
     public ResponseEntity<ResponseDto<String>> checkHealth() {
@@ -66,4 +70,17 @@ public class PersistenceController {
 
         return responseDto;
     }
+    @DeleteMapping("persistence/delete")
+    public ResponseEntity<ResponseDto<String>> create(
+            @RequestParam String customItemId
+    ) {
+        logger.info("message:Delete method is triggered...");
+
+        var responseDto = deleteService.run(customItemId);
+
+        logger.info("message:Delete method is executed.");
+
+        return responseDto;
+    }
+
 }
