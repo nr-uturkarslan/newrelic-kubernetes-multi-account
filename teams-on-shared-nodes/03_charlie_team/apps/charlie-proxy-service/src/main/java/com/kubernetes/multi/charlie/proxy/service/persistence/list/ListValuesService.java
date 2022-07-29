@@ -30,38 +30,15 @@ public class ListValuesService {
     public ResponseEntity<ResponseDto<ListValuesResponseDto>> run(
             Integer limit
     ) {
-        var model = new ResponseDto<ListValuesResponseDto>();
+        logger.info("message:Making request to persistence service...");
 
-        logger.info("Retrieving values from persistence service...");
+        var response = makeRequestToPersistenceService(limit);
 
-        var responseDtoFromPersistenceService = makeRequestToPersistenceService(limit);
-
-        var statusCode = responseDtoFromPersistenceService.getStatusCode();
-        logger.info("Status code: " + statusCode);
-        logger.info("Message: " + responseDtoFromPersistenceService.getBody().getMessage());
-
-        if (statusCode == HttpStatus.OK) {
-
-            var responseDto = new ListValuesResponseDto();
-            responseDto.setValues(new ArrayList<>());
-
-            responseDto.getValues().addAll(responseDtoFromPersistenceService.getBody().getData());
-
-            model.setMessage("Values are retrieved successfully.");
-            model.setStatusCode(HttpStatus.OK.value());
-            model.setData(responseDto);
-        }
-        else {
-            model.setMessage("Values are failed to be retrieved.");
-            model.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
-
-        logger.info("Values are retrieved successfully from persistence service.");
-
-        return new ResponseEntity<>(model, statusCode);
+        logger.info("message:Request to persistence service is made.");
+        return response;
     }
 
-    private ResponseEntity<ResponseDto<List<Value>>> makeRequestToPersistenceService(
+    private ResponseEntity<ResponseDto<ListValuesResponseDto>> makeRequestToPersistenceService(
             Integer limit
     ) {
         var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/list?limit=" + limit;
@@ -72,6 +49,6 @@ public class ListValuesService {
 
         var entity = new HttpEntity<>(null, headers);
         return restTemplate.exchange(url, HttpMethod.GET, entity,
-                new ParameterizedTypeReference<ResponseDto<List<Value>>>() {});
+                new ParameterizedTypeReference<ResponseDto<ListValuesResponseDto>>() {});
     }
 }

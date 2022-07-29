@@ -1,8 +1,9 @@
 package com.kubernetes.multi.charlie.persistence.controller;
 
 import com.kubernetes.multi.charlie.persistence.dto.ResponseDto;
-import com.kubernetes.multi.charlie.persistence.entities.Value;
+import com.kubernetes.multi.charlie.persistence.service.delete.PersistenceDeleteService;
 import com.kubernetes.multi.charlie.persistence.service.list.PersistenceListService;
+import com.kubernetes.multi.charlie.persistence.service.list.dto.ListValuesResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class PersistenceController {
     @Autowired
     private PersistenceListService listService;
 
+    @Autowired
+    private PersistenceDeleteService deleteService;
+
     @GetMapping("health")
     public ResponseEntity<ResponseDto<String>> checkHealth() {
 
@@ -28,7 +32,7 @@ public class PersistenceController {
     }
 
     @GetMapping("list")
-    public ResponseEntity<ResponseDto<List<Value>>> list(
+    public ResponseEntity<ResponseDto<ListValuesResponseDto>> list(
             @RequestParam(
                     name = "limit",
                     defaultValue = "5",
@@ -36,5 +40,12 @@ public class PersistenceController {
             ) Integer limit
     ) {
         return listService.run(limit);
+    }
+
+    @DeleteMapping("persistence/delete")
+    public ResponseEntity<ResponseDto<String>> delete(
+            @RequestParam String customItemId
+    ) {
+        return deleteService.run(customItemId);
     }
 }

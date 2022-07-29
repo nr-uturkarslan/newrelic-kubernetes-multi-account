@@ -24,8 +24,6 @@ public class DeleteValueService {
     public ResponseEntity<ResponseDto<String>> run(
             String valueId
     ) {
-        var model = new ResponseDto<ListValuesResponseDto>();
-
         logger.info("message:Making request to persistence service...");
 
         var response = makeRequestToPersistenceService(valueId);

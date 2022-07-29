@@ -60,7 +60,7 @@ public class PersistenceDeleteService {
 
             var responseDto = new ResponseDto<String>();
             responseDto.setMessage("The value with ID " + valueId + " deleted successfully.");
-            responseDto.setStatusCode(HttpStatus.OK.value());
+            responseDto.setStatusCode(HttpStatus.ACCEPTED.value());
 
             return new ResponseEntity<>(responseDto, HttpStatus.ACCEPTED);
         }
@@ -69,7 +69,7 @@ public class PersistenceDeleteService {
 
             var responseDto = new ResponseDto<String>();
             responseDto.setMessage("The value with ID " + valueId + " is failed to be deleted.");
-            responseDto.setStatusCode(HttpStatus.OK.value());
+            responseDto.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
             return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }

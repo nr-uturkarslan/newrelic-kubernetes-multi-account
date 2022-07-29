@@ -71,7 +71,7 @@ public class PersistenceController {
         return responseDto;
     }
     @DeleteMapping("persistence/delete")
-    public ResponseEntity<ResponseDto<String>> create(
+    public ResponseEntity<ResponseDto<String>> delete(
             @RequestParam String customItemId
     ) {
         logger.info("message:Delete method is triggered...");
@@ -82,5 +82,4 @@ public class PersistenceController {
 
         return responseDto;
     }
-
 }

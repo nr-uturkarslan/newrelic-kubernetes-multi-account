@@ -3,6 +3,7 @@ package com.kubernetes.multi.charlie.persistence.service.list;
 import com.kubernetes.multi.charlie.persistence.dto.ResponseDto;
 import com.kubernetes.multi.charlie.persistence.entities.Value;
 import com.kubernetes.multi.charlie.persistence.repositories.ValueRepository;
+import com.kubernetes.multi.charlie.persistence.service.list.dto.ListValuesResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PersistenceListService {
 
     public PersistenceListService() {}
 
-    public ResponseEntity<ResponseDto<List<Value>>> run(
+    public ResponseEntity<ResponseDto<ListValuesResponseDto>> run(
             Integer limit
     ) {
         logger.info("Retrieving first " + limit + "values...");
@@ -34,19 +35,22 @@ public class PersistenceListService {
 
             logger.info("First " + allValues.size() + " values are retrieved successfully.");
 
-            var responseDto = new ResponseDto<List<Value>>();
+            var data = new ListValuesResponseDto();
+            data.setValues(allValues);
+
+            var responseDto = new ResponseDto<ListValuesResponseDto>();
             responseDto.setMessage("First " + allValues.size() + " values are retrieved successfully.");
             responseDto.setStatusCode(HttpStatus.OK.value());
-            responseDto.setData(allValues);
+            responseDto.setData(data);
 
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         }
         catch (Exception e) {
             logger.error("First " + limit + " values are failed to be retrieved.");
 
-            var responseDto = new ResponseDto<List<Value>>();
+            var responseDto = new ResponseDto<ListValuesResponseDto>();
             responseDto.setMessage("First " + limit + " values are failed to be retrieved.");
-            responseDto.setStatusCode(HttpStatus.OK.value());
+            responseDto.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
             return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
