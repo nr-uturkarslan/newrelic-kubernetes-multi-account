@@ -1,8 +1,6 @@
-package com.kubernetes.multi.charlie.proxy.service.persistence.list;
+package com.kubernetes.multi.charlie.proxy.service.persistence.delete;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.kubernetes.multi.charlie.proxy.dto.ResponseDto;
-import com.kubernetes.multi.charlie.proxy.service.persistence.entity.Value;
 import com.kubernetes.multi.charlie.proxy.service.persistence.list.dto.ListValuesResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,43 +10,41 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 @Service
-public class ListValuesService {
-
-    private final Logger logger = LoggerFactory.getLogger(ListValuesService.class);
+public class DeleteValueService {
+    private final Logger logger = LoggerFactory.getLogger(DeleteValueService.class);
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public ListValuesService() {}
+    public DeleteValueService() {}
 
-    public ResponseEntity<ResponseDto<ListValuesResponseDto>> run(
-            Integer limit
+    public ResponseEntity<ResponseDto<String>> run(
+            String valueId
     ) {
         logger.info("message:Making request to persistence service...");
 
-        var response = makeRequestToPersistenceService(limit);
+        var response = makeRequestToPersistenceService(valueId);
 
         logger.info("message:Request to persistence service is made.");
         return response;
     }
 
-    private ResponseEntity<ResponseDto<ListValuesResponseDto>> makeRequestToPersistenceService(
-            Integer limit
+    private ResponseEntity<ResponseDto<String>> makeRequestToPersistenceService(
+            String valueId
     ) {
-        var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/list?limit=" + limit;
+        var url = "http://persistence.charlie.svc.cluster.local:8080/persistence/delete?valueId=" + valueId;
 
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         var entity = new HttpEntity<>(null, headers);
-        return restTemplate.exchange(url, HttpMethod.GET, entity,
-                new ParameterizedTypeReference<ResponseDto<ListValuesResponseDto>>() {});
+        return restTemplate.exchange(url, HttpMethod.DELETE, entity,
+                new ParameterizedTypeReference<ResponseDto<String>>() {});
     }
 }
+
+

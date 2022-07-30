@@ -67,18 +67,19 @@ func (mdb MongoDbClient) Insert(
 
 	result, err := mdb.valuesCollection.InsertOne(ctx, entity)
 	if err != nil {
-		commons.Log(zerolog.ErrorLevel, "Insertion to Mongo DB is failed.")
-		return errors.New("insertion to mongo db is failed")
+		commons.Log(zerolog.ErrorLevel, "Inserting entity to Mongo DB is failed.")
+		return errors.New("inserting entity to mongo db is failed")
 	}
 
 	id := fmt.Sprintf("value: %v", result.InsertedID)
-	commons.Log(zerolog.InfoLevel, "Document with ID:"+id+"is created successfully")
+	commons.Log(zerolog.InfoLevel, "Entity with ID:"+id+"is created successfully.")
 
 	return nil
 }
 
 func (mdb MongoDbClient) FindAll(
 	ginctx *gin.Context,
+	limit *int64,
 ) (
 	*[]entities.Entity,
 	error,
@@ -87,10 +88,18 @@ func (mdb MongoDbClient) FindAll(
 	txn := newrelic.FromContext(ginctx)
 	ctx := newrelic.NewContext(context.Background(), txn)
 
-	cursor, err := mdb.valuesCollection.Find(ctx, bson.D{{}})
+	var cursor *mongo.Cursor
+	var err error
+	if limit != nil {
+		opts := options.Find().SetLimit(*limit)
+		cursor, err = mdb.valuesCollection.Find(ctx, bson.D{{}}, opts)
+	} else {
+		cursor, err = mdb.valuesCollection.Find(ctx, bson.D{{}})
+	}
+
 	if err != nil {
-		commons.Log(zerolog.ErrorLevel, "Retrieving from Mongo DB is failed.")
-		return nil, errors.New("retrieving from mongo db is failed")
+		commons.Log(zerolog.ErrorLevel, "Retrieving entities from Mongo DB is failed.")
+		return nil, errors.New("retrieving entities from mongo db is failed")
 	}
 
 	defer cursor.Close(context.Background())
@@ -102,5 +111,24 @@ func (mdb MongoDbClient) FindAll(
 		values = append(values, value)
 	}
 
+	commons.Log(zerolog.InfoLevel, "Entities are retrieved successfully.")
 	return &values, nil
+}
+
+func (mdb MongoDbClient) Delete(
+	ginctx *gin.Context,
+	entityId string,
+) error {
+
+	txn := newrelic.FromContext(ginctx)
+	ctx := newrelic.NewContext(context.Background(), txn)
+
+	_, err := mdb.valuesCollection.DeleteOne(ctx, bson.M{"_id": entityId})
+	if err != nil {
+		commons.Log(zerolog.ErrorLevel, "Deleting entity with ID ["+entityId+"] from Mongo DB is failed.")
+		return errors.New("deleting entity with id [" + entityId + "] from Mongo DB is failed.")
+	}
+
+	commons.Log(zerolog.InfoLevel, "Entity is deleted successfully.")
+	return nil
 }

@@ -35,11 +35,26 @@ public class PersistancyController
 
     [HttpGet(Name = "ListValues")]
     [Route("list")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List(
+        [FromQuery] int? limit
+    )
     {
         _logger.LogInformation("ListValues endpoint is triggered...");
 
-        var responseDto = await _persistancyService.List();
+        var responseDto = await _persistancyService.List(limit);
+
+        return new OkObjectResult(responseDto);
+    }
+
+    [HttpDelete(Name = "DeleteValue")]
+    [Route("delete")]
+    public async Task<IActionResult> Delete(
+        [FromQuery] string id
+    )
+    {
+        _logger.LogInformation("DeleteValue endpoint is triggered...");
+
+        var responseDto = _persistancyService.Delete(id);
 
         return new OkObjectResult(responseDto);
     }
