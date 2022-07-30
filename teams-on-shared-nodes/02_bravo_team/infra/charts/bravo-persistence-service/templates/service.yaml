@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
-    prometheus.io/scrape: "true"
+    prometheus.io/scrape-bravo: "true"
   annotations:
     prometheus.io/path: "/persistence/metrics"
 spec:

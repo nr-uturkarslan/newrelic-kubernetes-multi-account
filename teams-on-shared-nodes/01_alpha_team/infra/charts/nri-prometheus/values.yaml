@@ -34,6 +34,12 @@ resources: {}
 rbac:
   # -- Specifies whether RBAC resources should be created
   create: true
+  # -- Specifies whether a ClusterRoleBinding should be assigned
+  clusterRoleBinding:
+    enabled: true
+  # -- Specifies whether a RoleBinding should be assigned
+  roleBinding:
+    enabled: false
 
 serviceAccount:
   # -- Add these annotations to the service account we create. Can be configured also with `global.serviceAccount.annotations`
