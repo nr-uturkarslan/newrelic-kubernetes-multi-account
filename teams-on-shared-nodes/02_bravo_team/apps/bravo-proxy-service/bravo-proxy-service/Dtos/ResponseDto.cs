@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Newtonsoft.Json;
 
 namespace bravo_proxy_service.Dtos;

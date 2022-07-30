@@ -43,7 +43,7 @@ listValues() {
 # Set variables
 REQUEST_INTERVAL=5
 
-bravoEndpoint="bravo/proxy/persistancy"
+bravoEndpoint="bravo/proxy/persistence"
 charlieEndpoint="charlie/proxy/persistence"
 
 # Get cluster external IP

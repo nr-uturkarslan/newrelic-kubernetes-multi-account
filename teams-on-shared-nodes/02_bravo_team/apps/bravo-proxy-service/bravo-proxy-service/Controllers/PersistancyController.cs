@@ -1,23 +1,23 @@
-﻿using bravo_proxy_service.Services.Persistancy;
-using bravo_proxy_service.Services.Persistancy.Handlers.Create.Dtos;
+﻿using bravo_proxy_service.Services.Persistence;
+using bravo_proxy_service.Services.Persistence.Handlers.Create.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bravo_proxy_service.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PersistancyController
+public class PersistenceController
 {
-    private readonly ILogger<PersistancyController> _logger;
-    private readonly IPersistancyService _persistancyService;
+    private readonly ILogger<PersistenceController> _logger;
+    private readonly IPersistenceService _persistenceService;
 
-    public PersistancyController(
-        ILogger<PersistancyController> logger,
-        IPersistancyService persistancyService
+    public PersistenceController(
+        ILogger<PersistenceController> logger,
+        IPersistenceService persistenceService
     )
     {
         _logger = logger;
-        _persistancyService = persistancyService;
+        _persistenceService = persistenceService;
     }
 
     [HttpPost(Name = "CreateValue")]
@@ -28,7 +28,7 @@ public class PersistancyController
     {
         _logger.LogInformation("CreateValue endpoint is triggered...");
 
-        var responseDto = await _persistancyService.Create(requestDto);
+        var responseDto = await _persistenceService.Create(requestDto);
 
         return new CreatedResult($"{responseDto.Data.Value.Id}", responseDto);
     }
@@ -41,7 +41,7 @@ public class PersistancyController
     {
         _logger.LogInformation("ListValues endpoint is triggered...");
 
-        var responseDto = await _persistancyService.List(limit);
+        var responseDto = await _persistenceService.List(limit);
 
         return new OkObjectResult(responseDto);
     }
@@ -54,7 +54,7 @@ public class PersistancyController
     {
         _logger.LogInformation("DeleteValue endpoint is triggered...");
 
-        var responseDto = _persistancyService.Delete(id);
+        var responseDto = _persistenceService.Delete(id);
 
         return new OkObjectResult(responseDto);
     }

@@ -25,14 +25,14 @@ redis["port"]=6379
 redis["replicas"]=1
 redis["nodePoolName"]="storage"
 
-# Persistancy
-declare -A persistancy
-persistancy["name"]="persistancy"
-persistancy["imageName"]="bravo-persistancy-service"
-persistancy["appName"]="bravo-persistancy-service"
-persistancy["port"]=8080
-persistancy["replicas"]=1
-persistancy["nodePoolName"]="general"
+# Persistence
+declare -A persistence
+persistence["name"]="persistence"
+persistence["imageName"]="bravo-persistence-service"
+persistence["appName"]="bravo-persistence-service"
+persistence["port"]=8080
+persistence["replicas"]=1
+persistence["nodePoolName"]="general"
 
 # Input Processor
 declare -A proxy
@@ -49,12 +49,12 @@ proxy["nodePoolName"]="general"
 
 # --platform linux/amd64 \
 
-### Persistancy
+### Persistence
 docker build \
   --platform linux/amd64 \
-  --tag "${DOCKERHUB_NAME}/${persistancy[imageName]}" \
-  "../../apps/bravo-persistancy-service/."
-docker push "${DOCKERHUB_NAME}/${persistancy[imageName]}"
+  --tag "${DOCKERHUB_NAME}/${persistence[imageName]}" \
+  "../../apps/bravo-persistence-service/."
+docker push "${DOCKERHUB_NAME}/${persistence[imageName]}"
 
 ### Proxy
 docker build \
@@ -64,7 +64,6 @@ docker build \
   --tag "${DOCKERHUB_NAME}/${proxy[imageName]}" \
   "../../apps/bravo-proxy-service/bravo-proxy-service/."
 docker push "${DOCKERHUB_NAME}/${proxy[imageName]}"
-
 #########
 
 ##################
@@ -99,21 +98,21 @@ helm upgrade mongo \
   --set nodePoolName=${mongo[nodePoolName]} \
   "../charts/mongo"
 
-### Persistancy ###
-helm upgrade ${persistancy[name]} \
+### Persistence ###
+helm upgrade ${persistence[name]} \
   --install \
   --wait \
   --debug \
   --set dockerhubName=$DOCKERHUB_NAME \
   --namespace $namespaceBravo \
-  --set name=${persistancy[name]} \
+  --set name=${persistence[name]} \
   --set namespace=$namespaceBravo \
-  --set imageName=${persistancy[imageName]} \
-  --set port=${persistancy[port]} \
-  --set nodePoolName=${persistancy[nodePoolName]} \
-  --set newRelicAppName=${persistancy[appName]} \
+  --set imageName=${persistence[imageName]} \
+  --set port=${persistence[port]} \
+  --set nodePoolName=${persistence[nodePoolName]} \
+  --set newRelicAppName=${persistence[appName]} \
   --set newRelicLicenseKey=$NEWRELIC_LICENSE_KEY_BRAVO \
-  "../charts/bravo-persistancy-service"
+  "../charts/bravo-persistence-service"
 
 ### Proxy ###
 helm upgrade ${proxy[name]} \
@@ -128,5 +127,4 @@ helm upgrade ${proxy[name]} \
   --set nodePoolName=${proxy[nodePoolName]} \
   --set port=${proxy[port]} \
   "../charts/bravo-proxy-service"
-
 #########

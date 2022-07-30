@@ -1,7 +1,7 @@
-﻿using bravo_proxy_service.Services.Persistancy;
-using bravo_proxy_service.Services.Persistancy.Handlers.Create;
-using bravo_proxy_service.Services.Persistancy.Handlers.Delete;
-using bravo_proxy_service.Services.Persistancy.Handlers.List;
+﻿using bravo_proxy_service.Services.Persistence;
+using bravo_proxy_service.Services.Persistence.Handlers.Create;
+using bravo_proxy_service.Services.Persistence.Handlers.Delete;
+using bravo_proxy_service.Services.Persistence.Handlers.List;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<ICreateValueHandler, CreateValueHandler>();
 builder.Services.AddScoped<IListValueHandler, ListValueHandler>();
 builder.Services.AddScoped<IDeleteValueHandler, DeleteValueHandler>();
-builder.Services.AddScoped<IPersistancyService, PersistancyService>();
+builder.Services.AddScoped<IPersistenceService, PersistenceService>();
 
 builder.Services.AddControllers();
 
