@@ -110,7 +110,7 @@ helm upgrade nri-prometheus-alpha \
   --set licenseKey=$NEWRELIC_LICENSE_KEY_ALPHA \
   --set rbac.clusterRoleBinding.enabled=true \
   --set rbac.roleBinding.enabled=false \
-  --set scrape_enabled_label="prometheus.io/scrape-alpha" \
+  --set config.scrape_enabled_label="prometheus.io/scrape-alpha" \
   "../charts/nri-prometheus"
 
 # Bravo
@@ -121,9 +121,9 @@ helm upgrade nri-prometheus-bravo \
   --namespace $namespaceBravo \
   --set global.cluster=$clusterName \
   --set licenseKey=$NEWRELIC_LICENSE_KEY_BRAVO \
-  --set rbac.clusterRoleBinding.enabled=false \
-  --set rbac.roleBinding.enabled=true \
-  --set scrape_enabled_label="prometheus.io/scrape-bravo" \
+  --set rbac.clusterRoleBinding.enabled=true \
+  --set rbac.roleBinding.enabled=false \
+  --set config.scrape_enabled_label="prometheus.io/scrape-bravo" \
   "../charts/nri-prometheus"
 
 # Charlie
@@ -134,9 +134,9 @@ helm upgrade nri-prometheus-charlie \
   --namespace $namespaceCharlie \
   --set global.cluster=$clusterName \
   --set licenseKey=$NEWRELIC_LICENSE_KEY_CHARLIE \
-  --set rbac.clusterRoleBinding.enabled=false \
-  --set rbac.roleBinding.enabled=true \
-  --set scrape_enabled_label="prometheus.io/scrape-charlie" \
+  --set rbac.clusterRoleBinding.enabled=true \
+  --set rbac.roleBinding.enabled=false \
+  --set config.scrape_enabled_label="prometheus.io/scrape-charlie" \
   "../charts/nri-prometheus"
 
 ### New Relic Logging ###
