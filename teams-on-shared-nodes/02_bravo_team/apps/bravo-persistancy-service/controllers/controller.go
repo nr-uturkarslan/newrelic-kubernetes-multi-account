@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/newrelic/go-agent/v3/integrations/nrgin"
 	"github.com/newrelic/go-agent/v3/newrelic"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"bravo-persistancy-service/data"
 	"bravo-persistancy-service/services/create"
@@ -33,22 +34,33 @@ func CreateHandlers(
 		DbClient: dbClient,
 	}
 
-	proxy := router.Group("/persistancy")
+	persistancy := router.Group("/persistancy")
 	{
 		// Health check
-		proxy.GET("/health", func(ginctx *gin.Context) {
+		persistancy.GET("/health", func(ginctx *gin.Context) {
 			ginctx.JSON(http.StatusOK, gin.H{
 				"message": "OK!",
 			})
 		})
 
+		// Prometheus
+		persistancy.GET("/metrics", prometheusHandler())
+
 		// Create method
-		proxy.POST("/create", createHandler.Run)
+		persistancy.POST("/create", createHandler.Run)
 
 		// List method
-		proxy.GET("/list", listHandler.Run)
+		persistancy.GET("/list", listHandler.Run)
 
 		// Delete method
-		proxy.DELETE("/delete", deleteHandler.Run)
+		persistancy.DELETE("/delete", deleteHandler.Run)
+	}
+}
+
+func prometheusHandler() gin.HandlerFunc {
+	h := promhttp.Handler()
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
 	}
 }

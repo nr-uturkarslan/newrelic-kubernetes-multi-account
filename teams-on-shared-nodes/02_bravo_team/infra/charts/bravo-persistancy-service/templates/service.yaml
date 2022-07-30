@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
+    prometheus.io/scrape: "true"
+  annotations:
+    prometheus.io/path: "/persistancy/metrics"
 spec:
   type: ClusterIP
   ports:
